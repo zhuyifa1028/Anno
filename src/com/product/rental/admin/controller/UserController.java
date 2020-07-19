@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.product.utils.PasswordUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -153,32 +155,54 @@ public class UserController extends BaseController {
     @SystemLog(description = "用户编辑-操作")
     @RequestMapping("/edit/10")
     public JsonResult edits(ModelAndView view, HttpServletRequest request) {
-        JsonResult json = new JsonResult(Status.FAILED);
+        JsonResult result = new JsonResult(Status.FAILED);
         try {
-            DesUtils des = new DesUtils(Constants.PUBLIC_SECRET);
             Map<String, String> param = super.getParameters(request);
-            String pwd = request.getParameter("pwd");
-            if (pwd.length() != 32) {
-                des = new DesUtils(Constants.PRIVATE_SECRET);
-                pwd = des.encrypt(pwd);
-                param.put("Pwd", MD5Utils.md5(pwd));
-            }
             User user = super.reflect("user", User.class, param);
-            //定义规则
+            // 定义规则
             user.setUserDriverid("1229");
+
+            boolean isUpdate = false;
+            Integer userId = user.getId();
+            String userPwd = user.getUserPwd();
+
+            // 当修改用户时
+            if (userId != null) {
+                // 检查密码是否更新
+                User old = userService.getById(userId);
+
+                if (StringUtils.isNotBlank(userPwd)) {
+                    isUpdate = !userPwd.equals(old.getUserPwd());
+                }
+            }
+
+            // 当更新密码或新增管理员时
+            if (isUpdate || userId == null) {
+                // 密码强度校验
+                boolean strengthValid = PasswordUtils.strengthValid(userPwd);
+                if (!strengthValid) {
+                    result.setMessage("密码设置至少一位大写，8位长度");
+                    return result;
+                }
+
+                // 密码加密处理
+                DesUtils des = new DesUtils(Constants.PUBLIC_SECRET);
+                user.setUserPwd(MD5Utils.md5(des.encrypt(userPwd)));
+            }
+
             boolean flag = userService.saveOrUpdate(user, super.ip(request));
             if (flag) {
-                json.setCode(Status.SUCCESS.getCode());
-                json.setMessage("编辑成功");
+                result.setCode(Status.SUCCESS.getCode());
+                result.setMessage("编辑成功");
             } else {
-                json.setMessage("编辑失败");
+                result.setMessage("编辑失败");
             }
         } catch (Exception e) {
             tag.error(e.getMessage(), e);
             e.printStackTrace();
             view.addObject(Constants.MODEL_MESSAGE, "参数错误");
         }
-        return json;
+        return result;
     }
 
     /**

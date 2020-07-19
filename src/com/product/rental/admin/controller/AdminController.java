@@ -7,6 +7,9 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.product.utils.PasswordUtils;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,17 +124,40 @@ public class AdminController extends BaseController {
     @SystemLog(description = "权限编辑-操作")
     @RequestMapping("edit/29")
     public JsonResult edits(ModelAndView view, HttpServletRequest request) {
-        JsonResult json = new JsonResult(Status.FAILED);
+        JsonResult result = new JsonResult(Status.FAILED);
+
         try {
-            DesUtils des = new DesUtils(Constants.PUBLIC_SECRET);
             Map<String, String> param = super.getParameters(request);
-            String pwd = request.getParameter("pwd");
-            if (pwd.length() != 32) {
-                des = new DesUtils(Constants.PRIVATE_SECRET);
-                pwd = des.encrypt(pwd);
-                param.put("pwd", MD5Utils.md5(pwd));
-            }
             Admin admin = super.reflect("admin", Admin.class, param);
+
+            boolean isUpdate = false;
+            Integer adminId = admin.getId();
+            String adminPwd = admin.getAdminPwd();
+
+            // 当修改管理员时
+            if (adminId != null) {
+                // 检查密码是否更新
+                Admin byId = adminService.getById(adminId);
+
+                if (StringUtils.isNotBlank(adminPwd)) {
+                    isUpdate = !adminPwd.equals(byId.getAdminPwd());
+                }
+            }
+
+            // 当更新密码或新增管理员时
+            if (isUpdate || adminId == null) {
+                // 密码强度校验
+                boolean strengthValid = PasswordUtils.strengthValid(adminPwd);
+                if (!strengthValid) {
+                    result.setMessage("密码设置至少一位大写，8位长度");
+                    return result;
+                }
+
+                // 密码加密处理
+                DesUtils des = new DesUtils(Constants.PRIVATE_SECRET);
+                admin.setAdminPwd(MD5Utils.md5(des.encrypt(adminPwd)));
+            }
+
             boolean flag = adminService.saveOrUpdate(admin, super.ip(request));
             if (flag) {
                 // 请求缓存对象
@@ -139,15 +165,15 @@ public class AdminController extends BaseController {
                 // 清除菜单缓存
                 session.removeAttribute(Constants.ADMIN_USER_MODULES_SESSION);
 
-                json.setCode(Status.SUCCESS.getCode());
-                json.setMessage("权限管理编辑成功");
+                result.setCode(Status.SUCCESS.getCode());
+                result.setMessage("权限管理编辑成功");
             } else {
-                json.setMessage("权限管理编辑失败");
+                result.setMessage("权限管理编辑失败");
             }
         } catch (Exception e) {
             tag.error(e.getMessage(), e);
             view.addObject(Constants.MODEL_MESSAGE, "参数错误");
         }
-        return json;
+        return result;
     }
 }

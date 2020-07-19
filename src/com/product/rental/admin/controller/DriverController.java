@@ -8,6 +8,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.product.utils.PasswordUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -136,27 +138,49 @@ public class DriverController extends BaseController {
     @SystemLog(description = "司机列表编辑-操作")
     @RequestMapping("edit/11")
     public JsonResult edits(ModelAndView view, HttpServletRequest request) {
-        JsonResult json = new JsonResult(Status.FAILED);
+        JsonResult result = new JsonResult(Status.FAILED);
         try {
-            DesUtils des = new DesUtils(Constants.PUBLIC_SECRET);
             Map<String, String> param = super.getParameters(request);
             String utel = request.getParameter("utel");
+
             Map<String, String> map = new HashMap<String, String>();
             map.put("userTel", utel);
             List<User> list = userService.getList(map);
             if (list.size() == 0) {
-                json.setMessage("亲！服务用户不存在。");
+                result.setMessage("亲！服务用户不存在。");
             } else {
-                String pwd = request.getParameter("pwd");
-
-                if (pwd.length() != 32) {
-                    des = new DesUtils(Constants.PRIVATE_SECRET);
-                    pwd = des.encrypt(pwd);
-                    param.put("pwd", MD5Utils.md5(pwd));
-                }
                 Driver driver = super.reflect("driver", Driver.class, param);
                 //定义规则
                 driver.setDriverLeavel("9");
+
+                boolean isUpdate = false;
+                Integer driverId = driver.getId();
+                String driverPwd = driver.getDriverPwd();
+
+                // 当修改司机时
+                if (driverId != null) {
+                    // 检查密码是否更新
+                    Driver old = driverService.getById(driverId);
+
+                    if (StringUtils.isNotBlank(driverPwd)) {
+                        isUpdate = !driverPwd.equals(old.getDriverPwd());
+                    }
+                }
+
+                // 当更新密码或新增司机时
+                if (isUpdate || driverId == null) {
+                    // 密码强度校验
+                    boolean strengthValid = PasswordUtils.strengthValid(driverPwd);
+                    if (!strengthValid) {
+                        result.setMessage("密码设置至少一位大写，8位长度");
+                        return result;
+                    }
+
+                    // 密码加密处理
+                    DesUtils des = new DesUtils(Constants.PUBLIC_SECRET);
+                    driver.setDriverPwd(MD5Utils.md5(des.encrypt(driverPwd)));
+                }
+
                 boolean flag = driverService.saveOrUpdate(driver, super.ip(request));
 
                 Map<String, String> mp = new HashMap<String, String>();
@@ -177,16 +201,16 @@ public class DriverController extends BaseController {
                 }
 
                 if (flag) {
-                    json.setCode(Status.SUCCESS.getCode());
-                    json.setMessage("司机列表编辑成功");
+                    result.setCode(Status.SUCCESS.getCode());
+                    result.setMessage("司机列表编辑成功");
                 } else {
-                    json.setMessage("司机列表编辑失败");
+                    result.setMessage("司机列表编辑失败");
                 }
             }
         } catch (Exception e) {
             tag.error(e.getMessage(), e);
             view.addObject(Constants.MODEL_MESSAGE, "参数错误");
         }
-        return json;
+        return result;
     }
 }
