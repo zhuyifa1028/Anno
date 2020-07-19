@@ -5,6 +5,7 @@ import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.product.utils.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -56,11 +57,31 @@ public class IndexController extends BaseController {
     @SystemLog(description = "用户登录-操作")
     @RequestMapping("login")
     public JsonResult login(HttpServletRequest request) {
-        JsonResult json = new JsonResult(Status.FAILED);
+        HttpSession session = request.getSession();
+        JsonResult result = new JsonResult(Status.FAILED);
+
         try {
             String name = request.getParameter("tel");
             String pwd = request.getParameter("pwd");
             if (StringUtils.isNotBlank(pwd) && StringUtils.isNotBlank(name)) {
+
+                String lockingKey = "LOCKING_" + name;
+                String errorTimesKey = "ERROR_TIMES_" + name;
+                Object lockingValue = session.getAttribute(lockingKey);
+                Object errorTimesValue = session.getAttribute(errorTimesKey);
+
+                long currentTimeMillis = System.currentTimeMillis();
+                // 检查是否锁定
+                if (lockingValue != null) {
+                    // 解锁时间
+                    Date parse = DateUtils.parse((String) lockingValue);
+                    if (parse.getTime() > currentTimeMillis) {
+
+                        result.setMessage("账户锁定中，解锁时间为 " + lockingValue);
+                        return result;
+                    }
+                }
+
                 DesUtils des = new DesUtils(Constants.PUBLIC_SECRET);
                 pwd = des.decrypt(pwd);
                 if (StringUtils.isNotBlank(pwd)) {
@@ -70,33 +91,47 @@ public class IndexController extends BaseController {
                     param.put("adminTel", name);
                     param.put("adminPwd", MD5Utils.md5(pwd));
                     List<Admin> admins = adminService.getList(param);
-                    if (admins != null && !admins.isEmpty() && admins.size() == 1) {
+                    if (admins != null && admins.size() == 1) {
                         Admin admin = admins.get(0);
                         if (admin.getAdminState() != null
                                 && admin.getAdminState().equals(Admin.ADMIN_ADMINISTRATE_YES)) {
-                            json.setMessage("用户不可使用,请联系管理员");
+                            result.setMessage("用户不可使用,请联系管理员");
                         } else {
-                            HttpSession session = request.getSession();
                             session.setAttribute(Constants.ADMIN_USER_SESSION, admin);
-                            json.setCode(Status.SUCCESS.getCode());
-                            json.setMessage("用户登录成功");
-
+                            result.setCode(Status.SUCCESS.getCode());
+                            result.setMessage("用户登录成功");
                         }
+                        return result;
                     } else {
-                        json.setMessage("用户名称或密码错误");
+                        result.setMessage("用户名称或密码错误");
                     }
                 } else {
-                    json.setMessage("用户密码解密失败");
+                    result.setMessage("用户密码解密失败");
+                }
+
+                if (errorTimesValue == null) {
+                    errorTimesValue = 0;
+                }
+                // 增加错误次数
+                int errorTimesValue2 = (Integer) errorTimesValue;
+                session.setAttribute(errorTimesKey, ++errorTimesValue2);
+
+                // 超过5次密码输入错误，账号锁定30分钟
+                if (errorTimesValue2 == 5) {
+                    Date date = new Date(currentTimeMillis + 30 * 60 * 1000);
+
+                    errorTimesValue = DateUtils.format(date);
+                    session.setAttribute(lockingKey, errorTimesValue);
                 }
             } else {
-                json.setMessage("参数错误");
+                result.setMessage("参数错误");
             }
         } catch (Exception e) {
-            json.setCode(Status.ERROR.getCode());
-            json.setMessage("系统错误,用户登录失败");
+            result.setCode(Status.ERROR.getCode());
+            result.setMessage("系统错误,用户登录失败");
             tag.error(e.getMessage(), e);
         }
-        return json;
+        return result;
     }
 
     /**
@@ -258,10 +293,20 @@ public class IndexController extends BaseController {
      */
     @RequestMapping("index.html")
     public ModelAndView index(ModelAndView view, HttpServletRequest request) {
-        try {
-        } catch (Exception e) {
-            tag.error(e.getMessage(), e);
-            view.addObject(Constants.MODEL_MESSAGE, "参数错误");
+
+        // 检查用户上次修改密码的时间
+        Admin user = (Admin) this.getAdminUser(request);
+
+        Admin admin = adminService.getById(user.getId());
+
+        Date lastChangeDate = admin.getLastChangeDate();
+
+        if (lastChangeDate != null) {
+            long dateDiffer = DateUtils.getDateDiffer(lastChangeDate,
+                    new Date(), DateUtils.DATE_TYPE_DAY);
+            if (dateDiffer > 30) {
+                view.addObject(Constants.MODEL_MESSAGE, "请修改登录密码");
+            }
         }
 
         return view;

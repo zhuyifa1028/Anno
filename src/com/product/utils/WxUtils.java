@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -181,7 +182,7 @@ public class WxUtils {
 	
 	public static void main(String[] args) {
 		//getOpenid("wx2a4d5190d7080890", "d6c473b8d77c12e27669ff33684d8b7b", "token");
-		System.out.println(getToken());
+		System.out.println(DigestUtils.md5Hex("A1111111"));
 	}
 
 }
