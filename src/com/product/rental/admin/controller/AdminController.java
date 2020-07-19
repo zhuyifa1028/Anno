@@ -68,16 +68,9 @@ public class AdminController extends BaseController {
                 List<Admin> list = adminService.getPage(param);
                 view.addObject("models", list);
             } else {
-                HttpSession session = request.getSession();
-                Admin admin = (Admin) session.getAttribute(Constants.ADMIN_USER_SESSION);
-                if (admin.getAdminAdministrate() != null
-                        && admin.getAdminAdministrate().equals(Admin.ADMIN_ADMINISTRATE_NOT)) {
-                    param.put("order_id", "desc");
-                    List<Admin> list = adminService.getPage(param);
-                    view.addObject("models", list);
-                } else {
-                    view.addObject(Constants.MODEL_MESSAGE, "没有此管理权限,请联系管理员");
-                }
+                param.put("order_id", "desc");
+                List<Admin> list = adminService.getPage(param);
+                view.addObject("models", list);
             }
         } catch (Exception e) {
             tag.error(e.getMessage(), e);
