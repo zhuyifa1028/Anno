@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.product.dao.RecordDao">
+	<resultMap id="base_result" type="Record">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="record_driverid" jdbcType="INTEGER" property="recordDriverid" />
+		<result column="record_carshow" jdbcType="VARCHAR" property="recordCarshow" />
+		<result column="record_cartitle" jdbcType="VARCHAR" property="recordCartitle" />
+		<result column="record_uscarshow" jdbcType="VARCHAR" property="recordUscarshow" />
+		<result column="record_uscartitle" jdbcType="VARCHAR" property="recordUscartitle" />
+		<result column="record_kftel" jdbcType="VARCHAR" property="recordKftel" />
+		<result column="record_kfpic" jdbcType="VARCHAR" property="recordKfpic" />
+		<result column="record_browsenumber" jdbcType="INTEGER"
+			property="recordBrowsenumber" />
+		<result column="record_trainstartpic" jdbcType="VARCHAR"
+			property="recordTrainstartpic" />
+		<result column="record_traintitle" jdbcType="VARCHAR" property="recordTraintitle" />
+		<result column="record_trainvicetitle" jdbcType="VARCHAR"
+			property="recordTrainvicetitle" />
+		<result column="record_traindate" jdbcType="TIMESTAMP"
+			property="recordTraindate" />
+		<result column="record_trainbrief" jdbcType="VARCHAR" property="recordTrainbrief"/>
+		<result column="record_traincontent" jdbcType="VARCHAR"
+			property="recordTraincontent" />
+		<result column="record_language" jdbcType="VARCHAR" property="recordLanguage" />
+		<result column="record_is_display" jdbcType="VARCHAR" property="recordIsDisplay" />
+		<result column="init_date" jdbcType="TIMESTAMP" property="initDate" />
+		<result column="init_addr" jdbcType="VARCHAR" property="initAddr" />
+	</resultMap>
+
+	<sql id="base_columns_list">
+		id,record_driverid,record_carshow,record_cartitle,record_uscarshow,record_uscartitle,record_kftel,record_kfpic,record_browsenumber,
+		record_trainstartpic,record_traintitle,record_trainvicetitle,record_traindate,record_trainbrief,
+		record_traincontent,record_language,
+		record_is_display, init_date,
+		init_addr
+	</sql>
+	<sql id="_columns_list">
+		id,record_carshow,record_cartitle,record_uscarshow,record_uscartitle,record_kftel,record_kfpic,record_browsenumber,
+		record_trainstartpic,record_traintitle,record_trainvicetitle,record_traindate,record_trainbrief,
+		record_traincontent,record_language,
+		record_is_display, init_date,
+		init_addr
+	</sql>
+
+	<!-- 关键字规则(EQ:等于、GT:大于、LT:小于、GE:大于等于、LE:小于等于) -->
+	<sql id="base_columns_where">
+		<if test="id != null">
+			and id = #{id}
+		</if>
+		<if test="recordDriverid != null and  recordDriverid !='' ">
+			and record_driverid = #{recordDriverid}
+		</if>
+		<if test="recordCarshow != null and  recordCarshow !='' ">
+			and record_carshow = #{recordCarshow}
+		</if>
+		<if test="recordCartitle != null and  recordCartitle !='' ">
+			and record_cartitle = #{recordCartitle}
+		</if>
+		<if test="recordUscarshow != null and  recordUscarshow !='' ">
+			and record_uscarshow = #{recordUscarshow}
+		</if>
+		<if test="recordUscartitle != null and  recordUscartitle !='' ">
+			and record_uscartitle = #{recordUscartitle}
+		</if>
+		<if test="recordKftel != null and recordKftel !='' ">
+			and record_kftel= #{recordKftel}
+		</if>
+		<if test="recordKfpic != null and recordKfpic !='' ">
+			and record_kfpic = #{recordKfpic}
+		</if>
+		<if test="recordBrowsenumber != null and recordBrowsenumber !='' ">
+			and record_browsenumber = #{recordBrowsenumber}
+		</if>
+		<if test="recordTraintartpic != null and recordTraintartpic !=''">
+			and record_trainstartpic = #{recordTrainstartpic}
+		</if>
+		<if test="recordTraintitle != null and recordTraintitle !=''">
+			and record_traintitle = #{recordTraintitle}
+		</if>
+		<if test="recordTrainvicetitle != null and recordTrainvicetitle != ''">
+			and record_trainvicetitle = #{recordTrainvicetitle}
+		</if>
+		<if test="recordTraindate != null and recordTraindate != ''">
+			and record_traindate = #{recordTraindate}
+		</if>
+		<if test="recordTraincontent != null and recordTraincontent != ''">
+			and record_traincontent = #{recordTraincontent}
+		</if>
+		<if test="recordTrainbrief != null and recordTrainbrief != ''">
+			and record_trainbrief = #{recordTrainbrief}
+		</if>
+		<if test="recordLanguage != null and recordLanguage != ''">
+			and record_language = #{recordLanguage}
+		</if>
+		<if test="recordIsDisplay != null and recordIsDisplay != ''">
+			and record_is_display = #{recordIsDisplay}
+		</if>
+		<if test="initDate != null and initDate != ''">
+			and init_date = #{initDate}
+		</if>
+		<if test="initAddr != null and initAddr != ''">
+			and init_addr = #{initAddr}
+		</if>
+	</sql>
+
+	<sql id="base_columns_order_by">
+		<trim suffixOverrides="," prefix="order by ">
+			<if test="order_id != null and order_id != ''">
+				<choose>
+					<when test="order_id == 'desc'">
+						id desc,
+					</when>
+					<otherwise>
+						id asc,
+					</otherwise>
+				</choose>
+			</if>
+		</trim>
+	</sql>
+
+	<select id="get" parameterType="map" resultMap="base_result">
+		select
+		<include refid="base_columns_list" />
+		from
+		an_record
+		<where>
+			<include refid="base_columns_where" />
+		</where>
+		<include refid="base_columns_order_by" />
+	</select>
+
+	<select id="list" parameterType="map" resultMap="base_result">
+		select
+		<include refid="base_columns_list" />
+		from
+		an_record
+		<where>
+			<include refid="base_columns_where" />
+		</where>
+		<include refid="base_columns_order_by" />
+	</select>
+
+	<select id="page" parameterType="map" resultMap="base_result">
+		select
+		<include refid="base_columns_list" />
+		from
+		an_record
+		<where>
+			<include refid="base_columns_where" />
+		</where>
+		<include refid="base_columns_order_by" />
+	</select>
+
+	<insert id="save" keyColumn="id" keyProperty="id" parameterType="Record"
+		useGeneratedKeys="true">
+		insert into an_record
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="recordDriverid != null">
+				record_driverid,
+			</if>
+			<if test="recordCarshow != null">
+				record_carshow,
+			</if>
+			<if test="recordCartitle != null">
+				record_cartitle,
+			</if>
+			<if test="recordUscarshow != null">
+				record_uscarshow,
+			</if>
+			<if test="recordUscartitle != null">
+				record_uscartitle,
+			</if>
+
+			<if test="recordKftel != null">
+				record_kftel,
+			</if>
+			<if test="recordKfpic != null">
+				record_kfpic,
+			</if>
+			<if test="recordBrowsenumber != null">
+				record_browsenumber,
+			</if>
+
+			<if test="recordTrainstartpic != null">
+				record_trainstartpic,
+			</if>
+			<if test="recordTraintitle != null">
+				record_traintitle,
+			</if>
+			<if test="recordTrainvicetitle != null">
+				record_trainvicetitle,
+			</if>
+
+			<if test="recordTraindate != null">
+				record_traindate,
+			</if>
+			<if test="recordTrainbrief != null">
+				record_trainbrief,
+			</if>
+			<if test="recordTraincontent != null">
+				record_traincontent,
+			</if>
+			<if test="recordLanguage != null">
+				record_language,
+			</if>
+			<if test="recordIsDisplay != null">
+				record_is_display,
+			</if>
+			<if test="initDate != null">
+				init_date,
+			</if>
+			<if test="initAddr != null">
+				init_addr,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="recordDriverid != null">
+				#{recordDriverid,jdbcType=INTEGER},
+			</if>
+			<if test="recordCarshow != null">
+				#{recordCarshow,jdbcType=VARCHAR},
+			</if>
+			<if test="recordCartitle != null">
+				#{recordCartitle,jdbcType=VARCHAR},
+			</if>
+            <if test="recordUscarshow != null">
+				#{recordUscarshow,jdbcType=VARCHAR},
+			</if>
+			<if test="recordUscartitle != null">
+				#{recordUscartitle,jdbcType=VARCHAR},
+			</if>
+
+			<if test="recordKftel != null">
+				#{recordKftel,jdbcType=VARCHAR},
+			</if>
+			<if test="recordKfpic != null">
+				#{recordKfpic,jdbcType=VARCHAR},
+			</if>
+			<if test="recordBrowsenumber != null">
+				#{recordBrowsenumber,jdbcType=INTEGER},
+			</if>
+
+			<if test="recordTrainstartpic != null">
+				#{recordTrainstartpic,jdbcType=VARCHAR},
+			</if>
+			<if test="recordTraintitle != null">
+				#{recordTraintitle,jdbcType=VARCHAR},
+			</if>
+			<if test="recordTrainvicetitle != null">
+				#{recordTrainvicetitle,jdbcType=VARCHAR},
+			</if>
+			<if test="recordTraindate != null">
+				#{recordTraindate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="recordTrainbrief != null">
+				#{recordTrainbrief,jdbcType=VARCHAR},
+			</if>
+			<if test="recordTraincontent != null">
+				#{recordTraincontent,jdbcType=VARCHAR},
+			</if>
+			<if test="recordLanguage != null">
+				#{recordLanguage,jdbcType=VARCHAR},
+			</if>
+			<if test="recordIsDisplay != null">
+				#{recordIsDisplay,jdbcType=VARCHAR},
+			</if>
+			<if test="initDate != null">
+				#{initDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="initAddr != null">
+				#{initAddr,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="update" parameterType="Record">
+		update an_record
+		<set>
+			<if test="recordDriverid != null">
+				record_driverid =#{recordDriverid,jdbcType=INTEGER},
+			</if>
+			<if test="recordCarshow != null">
+				record_carshow = #{recordCarshow,jdbcType=VARCHAR},
+			</if>
+			<if test="recordCartitle != null">
+				record_cartitle = #{recordCartitle,jdbcType=VARCHAR},
+			</if>
+			<if test="recordUscarshow != null">
+				record_uscarshow = #{recordUscarshow,jdbcType=VARCHAR},
+			</if>
+			<if test="recordUscartitle != null">
+				record_uscartitle = #{recordUscartitle,jdbcType=VARCHAR},
+			</if>
+			<if test="recordKftel != null">
+				record_kftel = #{recordKftel,jdbcType=VARCHAR},
+			</if>
+			<if test="recordKfpic != null">
+				record_kfpic = #{recordKfpic,jdbcType=VARCHAR},
+			</if>
+			<if test="recordBrowsenumber != null">
+				record_browsenumber =#{recordBrowsenumber,jdbcType=INTEGER},
+			</if>
+			<if test="recordTrainstartpic != null">
+				record_trainstartpic =#{recordTrainstartpic,jdbcType=VARCHAR},
+			</if>
+			
+			<if test="recordTrainvicetitle != null">
+				record_trainvicetitle =#{recordTrainvicetitle,jdbcType=VARCHAR},
+			</if>
+			
+			<if test="recordTraintitle != null">
+				record_traintitle =#{recordTraintitle,jdbcType=VARCHAR},
+			</if>
+			
+			<if test="recordTraindate != null">
+				record_traindate =#{recordTraindate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="recordTrainbrief != null">
+				record_trainbrief =#{recordTrainbrief,jdbcType=VARCHAR},
+			</if>
+			<if test="recordTraincontent != null">
+				record_traincontent =#{recordTraincontent,jdbcType=VARCHAR},
+			</if>
+
+			<if test="recordLanguage != null">
+				record_language = #{recordLanguage,jdbcType=VARCHAR},
+			</if>
+
+			<if test="recordIsDisplay != null">
+				record_is_display = #{recordIsDisplay,jdbcType=VARCHAR},
+			</if>
+
+			<if test="initDate != null">
+				init_date = #{initDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="initAddr != null">
+				init_addr = #{initAddr,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>

@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.product.dao.AreaDao">
+	<resultMap id="base_result" type="Area">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="area_way" jdbcType="VARCHAR" property="areaWay" />
+		<result column="area_name" jdbcType="VARCHAR" property="areaName" />
+		<result column="area_short" jdbcType="VARCHAR" property="areaShort" />
+		<result column="area_sequence" jdbcType="INTEGER" property="areaSequence" />
+		<result column="area_parent_id" jdbcType="INTEGER" property="areaParentId" />
+		<result column="area_is_display" jdbcType="VARCHAR" property="areaIsDisplay" />
+		<result column="area_language" jdbcType="VARCHAR" property="areaLanguage" />
+		<result column="init_date" jdbcType="TIMESTAMP" property="initDate" />
+		<result column="init_addr" jdbcType="VARCHAR" property="initAddr" />
+	</resultMap>
+	
+	<sql id="base_columns_list">
+		id, area_way,area_name, area_short,area_sequence, area_parent_id, 
+		area_is_display, area_language, init_date, init_addr
+	</sql>
+		<sql id="base_columns_where">
+		<if test="id != null">
+			and id = #{id}
+		</if>
+		<if test="areaWay !=null and areaWay !=''">
+			and area_way = #{areaWay}
+		</if>		
+		<if test="name != null and name != ''">
+			and area_name like CONCAT('%',#{name},'%')
+		</if>
+		<if test="areaIsDisplay != null and areaIsDisplay != ''">
+			and area_is_display = #{areaIsDisplay}
+		</if>
+		<if test="areaLanguage != null">
+			and area_language = #{areaLanguage}
+		</if>
+		<if test="areaShort != null and areaShort != ''">
+			and area_short like CONCAT('%',#{areaShort},'%')
+		</if>
+		<if test="gt_sequence != null and gt_sequence != ''">
+			<![CDATA[and area_sequence > #{gt_sequence}]]>
+		</if>
+		<if test="lt_sequence != null and lt_sequence != ''">
+			<![CDATA[and area_sequence < #{lt_sequence}]]>
+		</if>
+		<if test="ge_sequence != null and ge_sequence != ''">
+			<![CDATA[and area_sequence >= #{ge_sequence}]]>
+		</if>
+		<if test="le_sequence != null and le_sequence != ''">
+			<![CDATA[and area_sequence <= #{lt_sequence}]]>
+		</if>
+		<if test="parent_id != null and parent_id != ''">
+			and area_parent_id = #{parent_id}
+		</if>
+		<if test="eq_idate != null and eq_idate != ''">
+			<![CDATA[and DATEDIFF(init_date, #{eq_idate}) = 0]]>
+		</if>
+		<if test="gt_idate != null and gt_idate != ''">
+			<![CDATA[and UNIX_TIMESTAMP(init_date) > UNIX_TIMESTAMP(#{gt_idate})]]>
+		</if>
+		<if test="lt_idate != null and lt_idate != ''">
+			<![CDATA[and UNIX_TIMESTAMP(init_date) > UNIX_TIMESTAMP(#{lt_idate})]]>
+		</if>
+		<if test="ge_idate != null and ge_idate != ''">
+			<![CDATA[and UNIX_TIMESTAMP(init_date) >= UNIX_TIMESTAMP(#{ge_idate})]]>
+		</if>
+		<if test="le_idate != null and le_idate != ''">
+			<![CDATA[and UNIX_TIMESTAMP(init_date) <= UNIX_TIMESTAMP(#{le_idate})]]>
+		</if>
+		<if test="iaddr != null and iaddr != ''">
+			and init_addr = #{iaddr}
+		</if>
+	</sql>
+	
+	<sql id="base_columns_order_by">
+		<trim suffixOverrides="," prefix="order by ">
+			<if test="areaParentId != null and areaParentId != ''">
+				<choose>
+					<when test="areaParentid == 'desc'">
+						area_parent_id desc,
+					</when>
+					<otherwise>
+						area_parent_id asc,
+					</otherwise>
+				</choose>
+			</if>
+			<if test="areaSequence != null and areaSequence != ''">
+				<choose>
+					<when test="areaSequence == 'desc'">
+						area_sequence desc,
+					</when>
+					<otherwise>
+						area_sequence asc,
+					</otherwise>
+				</choose>
+			</if>
+			<if test="order_id != null and order_id != ''">
+				<choose>
+					<when test="order_id == 'desc'">
+						id desc,
+					</when>
+					<otherwise>
+						id asc,
+					</otherwise>
+				</choose>
+			</if>
+		</trim>
+	</sql>
+	
+	<!-- 下级区域集合 -->
+	<resultMap id="childs_area_result" type="Area" extends="base_result">
+		<association property="child" column="{parent_id=id}" select="_childs" />
+	</resultMap>
+	
+	<!-- 下级区域集合 -->
+	<resultMap id="child_area_result" type="Area" extends="base_result">
+		<association property="child" column="{parent_id=id}" select="_child" />
+	</resultMap>
+	
+	<!-- 上级区域集合 -->
+	<resultMap id="parents_area_result" type="Area" extends="base_result">
+		<collection property="parent" column="{id=area_parent_id}" select="_parents" />
+	</resultMap>
+	
+	<!-- 上级区域集合 -->
+	<resultMap id="parent_area_result" type="Area" extends="base_result">
+		<collection property="parent" column="{id=area_parent_id}" select="_parent" />
+	</resultMap>
+	
+	<!-- 获取下级区域(内部执行方法) -->
+	<select id="_childs" parameterType="map" resultMap="childs_area_result">
+		select
+			<include refid="base_columns_list" />
+		from
+			an_area
+		<where>
+			<include refid="base_columns_where" />
+		</where>
+		order by
+			area_sequence, id
+	</select>
+	
+	<!-- 获取下级区域(内部执行方法) -->
+	<select id="_child" parameterType="map" resultMap="base_result">
+		select
+			<include refid="base_columns_list" />
+		from
+			an_area
+		<where>
+			<include refid="base_columns_where" />
+		</where>
+		order by
+			area_sequence, id
+	</select>
+	
+	<!-- 获取下级区域 -->
+	<select id="childs" parameterType="map" resultMap="childs_area_result">
+		select
+			<include refid="base_columns_list" />
+		from
+			an_area
+		<where>
+			<include refid="base_columns_where" />
+		</where>
+		<include refid="base_columns_order_by" />
+	</select>
+	
+	<!-- 获取下级区域 -->
+	<select id="child" parameterType="map" resultMap="child_area_result">
+		select
+			<include refid="base_columns_list" />
+		from
+			an_area
+		<where>
+			<include refid="base_columns_where" />
+		</where>
+		<include refid="base_columns_order_by" />
+	</select>
+	
+	<!-- 获取上级区域(内部执行方法) -->
+	<select id="_parents" parameterType="map" resultMap="parents_area_result">
+		select
+			<include refid="base_columns_list" />
+		from
+			an_area
+		<where>
+			<include refid="base_columns_where" />
+		</where>
+	</select>
+	
+	<!-- 获取上级区域(内部执行方法) -->
+	<select id="_parent" parameterType="map" resultMap="base_result">
+		select
+			<include refid="base_columns_list" />
+		from
+		    an_area
+		<where>
+			<include refid="base_columns_where" />
+		</where>
+	</select>
+	
+	<!-- 获取上级区域 -->
+	<select id="parents" parameterType="map" resultMap="parents_area_result">
+		select
+			<include refid="base_columns_list" />
+		from
+			an_area
+		<where>
+			<include refid="base_columns_where" />
+		</where>
+		<include refid="base_columns_order_by" />
+	</select>
+	
+	<!-- 获取上级区域 -->
+	<select id="parent" parameterType="map" resultMap="parent_area_result">
+		select
+			<include refid="base_columns_list" />
+		from
+			an_area
+		<where>
+			<include refid="base_columns_where" />
+		</where>
+		<include refid="base_columns_order_by" />
+	</select>
+	
+	<select id="get" parameterType="map" resultMap="base_result">
+		select
+			<include refid="base_columns_list" />
+		from
+			an_area
+		<where>
+			<include refid="base_columns_where" />
+		</where>
+	</select>
+	
+	<select id="list" parameterType="map" resultMap="base_result">
+		select
+			<include refid="base_columns_list" />
+		from
+			an_area
+		<where>
+			<include refid="base_columns_where" />
+		</where>
+		<include refid="base_columns_order_by" />
+	</select>
+	
+	<select id="page" parameterType="map" resultMap="base_result">
+		select
+			<include refid="base_columns_list" />
+		from
+			an_area
+		<where>
+			<include refid="base_columns_where" />
+		</where>
+		<include refid="base_columns_order_by" />
+	</select>
+	
+	<insert id="save" keyColumn="id" keyProperty="id" parameterType="Area" useGeneratedKeys="true">
+		insert into an_area
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="areaWay != null">
+				area_way,
+			</if>
+			
+			<if test="areaName != null">
+				area_name,
+			</if>
+			<if test="areaShort != null">
+				area_short,
+			</if>
+			<if test="areaSequence != null">
+				area_sequence,
+			</if>
+			<if test="areaParentId != null">
+				area_parent_id,
+			</if>
+			<if test="areaIsDisplay != null">
+				area_is_display,
+			</if>
+			<if test="areaLanguage != null">
+				area_language,
+			</if>		
+			<if test="initDate != null">
+				init_date,
+			</if>
+			<if test="initAddr != null">
+				init_addr,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="areaWay != null">
+				#{areaWay,jdbcType=VARCHAR},
+			</if>	
+			<if test="areaName != null">
+				#{areaName,jdbcType=VARCHAR},
+			</if>	
+			<if test="areaShort != null">
+				#{areaShort,jdbcType=VARCHAR},
+			</if>			
+			<if test="areaSequence != null">
+				#{areaSequence,jdbcType=INTEGER},
+			</if>
+			<if test="areaParentId != null">
+				#{areaParentId,jdbcType=INTEGER},
+			</if>
+			<if test="areaIsDisplay != null">
+				#{areaIsDisplay,jdbcType=VARCHAR},
+			</if>
+			<if test="areaLanguage != null">
+				#{areaLanguage,jdbcType=VARCHAR},
+			</if>			
+			<if test="initDate != null">
+				#{initDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="initAddr != null">
+				#{initAddr,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	
+	<update id="update" parameterType="Area">
+		update an_area
+		<set>
+		    <if test="areaWay != null">
+				area_way = #{areaWay,jdbcType=VARCHAR},
+			</if>
+			<if test="areaName != null">
+				area_name = #{areaName,jdbcType=VARCHAR},
+			</if>
+			<if test="areaShort != null">
+				area_short = #{areaShort,jdbcType=VARCHAR},
+			</if>
+			<if test="areaSequence != null">
+				area_sequence = #{areaSequence,jdbcType=INTEGER},
+			</if>
+			<if test="areaParentId != null">
+				area_parent_id = #{areaParentId,jdbcType=INTEGER},
+			</if>
+			<if test="areaIsDisplay != null">
+				area_is_display = #{areaIsDisplay,jdbcType=VARCHAR},
+			</if>
+			<if test="areaLanguage != null">
+				area_language = #{areaLanguage,jdbcType=VARCHAR},
+			</if>			
+			<if test="initDate != null">
+				init_date = #{initDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="initAddr != null">
+				init_addr = #{initAddr,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	
+</mapper>

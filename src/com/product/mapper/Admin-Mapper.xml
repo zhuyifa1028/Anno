@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.product.dao.AdminDao">
+	<resultMap id="base_result" type="Admin">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="admin_id" jdbcType="INTEGER" property="adminId" />
+		<result column="admin_name" jdbcType="VARCHAR" property="adminName" />
+		<result column="admin_pwd" jdbcType="VARCHAR" property="adminPwd" />
+		<result column="admin_tel" jdbcType="VARCHAR" property="adminTel" />
+		<result column="admin_pic" jdbcType="VARCHAR" property="adminPic" />
+		<result column="admin_language" jdbcType="VARCHAR" property="adminLanguage" />
+		<result column="admin_is_display" jdbcType="VARCHAR" property="adminIsDisplay" />
+		<result column="admin_administrate" jdbcType="VARCHAR" property="adminAdministrate" />
+		<result column="admin_adminuser" jdbcType="VARCHAR" property="adminAdminuser" />	
+		<result column="admin_admindriver" jdbcType="VARCHAR" property="adminAdmindriver" />
+		<result column="admin_admintj" jdbcType="VARCHAR" property="adminAdmintj" />
+		<result column="admin_adminpx" jdbcType="VARCHAR" property="adminAdminpx" />
+		<result column="admin_adminuc" jdbcType="VARCHAR" property="adminAdminuc" />
+		<result column="admin_admints" jdbcType="VARCHAR" property="adminAdmints" />
+		<result column="admin_adminbz" jdbcType="VARCHAR" property="adminAdminbz" />
+		<result column="admin_adminarea" jdbcType="VARCHAR" property="adminAdminarea" />
+		<result column="admin_state" jdbcType="VARCHAR" property="adminState" />
+		<result column="login_date" jdbcType="TIMESTAMP" property="loginDate" />
+		<result column="login_addre" jdbcType="VARCHAR" property="loginAddre" />
+		<result column="init_date" jdbcType="TIMESTAMP" property="initDate" />
+		<result column="init_addr" jdbcType="VARCHAR" property="initAddr" />
+	</resultMap>
+
+	<sql id="base_columns_list">
+		id, admin_id, admin_name, admin_pwd, admin_tel, admin_pic,
+		admin_language, admin_is_display, admin_administrate,admin_adminuser,
+		admin_admindriver,admin_admintj,admin_adminpx,admin_adminuc,
+		admin_admints,admin_adminbz,admin_adminarea,
+		admin_state,login_date,login_addre, init_date, init_addr
+	</sql>
+
+	<!-- 关键字规则(EQ:等于、GT:大于、LT:小于、GE:大于等于、LE:小于等于) -->
+	<sql id="base_columns_where">
+		<if test="id != null">
+			and id = #{id}
+		</if>
+		<if test="adminId != null">
+			and admin_id = #{adminId}
+		</if>
+		<if test="adminName != null and adminName != ''">
+			and admin_name= #{adminName}
+		</if>
+		<if test="adminPwd != null and adminPwd != ''">
+			and admin_pwd= #{adminPwd}
+		</if>
+		<if test="adminTel != null and adminTel != ''">
+			and admin_tel like CONCAT('%',#{adminTel},'%')
+		</if>
+		<if test="adminPic != null and adminPic != ''">
+			and admin_pic = #{adminPic}
+		</if>
+		<if test="adminState != null and adminState != ''">
+			and admin_state = #{adminState}
+		</if>
+		<if test="adminLanguage != null and adminLanguage != ''">
+			and admin_language = #{adminLanguage}
+		</if>
+		<if test="adminIsDisplay != null and adminIsDisplay != ''">
+			and admin_is_display = #{adminIsDisplay}
+		</if>
+		<if test="adminAdministrate != null and adminAdministrate != ''">
+			and admin_administrate = #{adminAdministrate}
+		</if>
+		<if test="adminAdminuser != null and adminAdminuser != ''">
+			and admin_adminuser = #{adminAdminuser}
+		</if>
+		<if test="adminAdmindriver != null and adminAdmindriver != ''">
+			and admin_admindriver = #{adminAdmindriver}
+		</if>
+		<if test="adminAdmintj != null and adminAdmintj != ''">
+			and admin_admintj = #{adminAdmintj}
+		</if>
+		<if test="adminAdminpx != null and adminAdminpx != ''">
+			and admin_adminpx = #{adminAdminpx}
+		</if>
+		<if test="adminAdminuc != null and adminAdminuc != ''">
+			and admin_adminuc = #{adminAdminuc}
+		</if>
+		<if test="adminAdmints != null and adminAdmints != ''">
+			and admin_admints = #{adminAdmints}
+		</if>
+		<if test="adminAdminbz != null and adminAdminbz != ''">
+			and admin_adminbz = #{adminAdminbz}
+		</if>
+		<if test="adminAdminarea != null and adminAdminarea != ''">
+			and admin_adminarea = #{adminAdminarea}
+		</if>
+		<if test="loginDate != null and loginDate != ''">
+			and login_date = #{loginDate}
+		</if>
+		<if test="loginAddre != null and loginAddre != ''">
+			and login_addre = #{loginAddre}
+		</if>
+		<if test="initDate != null and initDate != ''">
+			and init_date = #{initDate}
+		</if>
+		<if test="initAddr != null and initAddr != ''">
+			and init_addr = #{initAddr}
+		</if>
+	</sql>
+
+	<sql id="base_columns_order_by">
+		<trim suffixOverrides="," prefix="order by ">
+			<if test="order_id != null and order_id != ''">
+				<choose>
+					<when test="order_id == 'desc'">
+						id desc,
+					</when>
+					<otherwise>
+						id asc,
+					</otherwise>
+				</choose>
+			</if>
+		</trim>
+	</sql>
+
+	<select id="get" parameterType="map" resultMap="base_result">
+		select
+		<include refid="base_columns_list" />
+		from
+		an_admin
+		<where>
+			<include refid="base_columns_where" />
+		</where>
+		<include refid="base_columns_order_by" />
+	</select>
+
+	<select id="list" parameterType="map" resultMap="base_result">
+		select
+		<include refid="base_columns_list" />
+		from
+		an_admin
+		<where>
+			<include refid="base_columns_where" />
+		</where>
+		<include refid="base_columns_order_by" />
+	</select>
+
+	<select id="page" parameterType="map" resultMap="base_result">
+		select
+		<include refid="base_columns_list" />
+		from
+		an_admin
+		<where>
+			<include refid="base_columns_where" />
+		</where>
+		<include refid="base_columns_order_by" />
+	</select>
+
+	<insert id="save" keyColumn="id" keyProperty="id" parameterType="Admin"
+		useGeneratedKeys="true">
+		insert into an_admin
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="adminId != null">
+				admin_id,
+			</if>
+			<if test="adminName != null">
+				admin_name,
+			</if>
+			<if test="adminPwd != null">
+				admin_pwd,
+			</if>
+			<if test="adminTel != null">
+				admin_tel,
+			</if>
+			<if test="adminPic != null">
+				admin_pic,
+			</if>
+			<if test="adminLanguage != null">
+				admin_language,
+			</if>
+			<if test="adminState != null">
+				admin_state,
+			</if>
+			<if test="adminIsDisplay != null">
+				admin_is_display,
+			</if>
+			<if test="adminAdministrate != null">
+				admin_administrate,
+			</if>
+			
+			<if test="adminAdminuser != null">
+			    admin_adminuser,
+		    </if>
+		    <if test="adminAdmindriver != null">
+			    admin_admindriver,
+		    </if>
+		    <if test="adminAdmintj != null">
+			    admin_admintj,
+		    </if>
+		    <if test="adminAdminpx != null">
+			    admin_adminpx,
+		    </if>
+		    <if test="adminAdminuc != null">
+			    admin_adminuc,
+		    </if>
+		    <if test="adminAdmints != null">
+			    admin_admints,
+		    </if>
+		    <if test="adminAdminbz != null">
+			    admin_adminbz,
+		    </if>
+		    <if test="adminAdminarea != null">
+			    admin_adminarea,
+		    </if>
+			<if test="loginDate != null">
+				login_date,
+			</if>
+			<if test="loginAddre != null">
+				login_addre,
+			</if>
+			<if test="initDate != null">
+				init_date,
+			</if>
+			<if test="initAddr != null">
+				init_addr,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="adminId != null">
+				#{adminId,jdbcType=INTEGER},
+			</if>
+			<if test="adminName != null">
+				#{adminName,jdbcType=VARCHAR},
+			</if>
+			<if test="adminPwd != null">
+				#{adminPwd,jdbcType=VARCHAR},
+			</if>
+			<if test="adminTel != null">
+				#{adminTel,jdbcType=VARCHAR},
+			</if>
+			<if test="adminPic != null">
+				#{adminPic,jdbcType=VARCHAR},
+			</if>
+			<if test="adminState != null">
+				#{adminState,jdbcType=VARCHAR},
+			</if>
+			<if test="adminLanguage != null">
+				#{adminLanguage,jdbcType=VARCHAR},
+			</if>
+			<if test="adminIsDisplay != null">
+				#{adminIsDisplay,jdbcType=VARCHAR},
+			</if>
+			<if test="adminAdministrate != null">
+				#{adminAdministrate,jdbcType=VARCHAR},
+			</if>
+			
+			<if test="adminAdminuser != null">
+			    #{adminAdminuser,jdbcType=VARCHAR},
+		    </if>
+		    <if test="adminAdmindriver != null">
+			    #{adminAdmindriver,jdbcType=VARCHAR},
+		    </if>
+		    <if test="adminAdmintj != null">
+			    #{adminAdmintj,jdbcType=VARCHAR},
+		    </if>
+		    <if test="adminAdminpx != null">
+			    #{adminAdminpx,jdbcType=VARCHAR},
+		    </if>
+		    <if test="adminAdminuc != null">
+			    #{adminAdminuc,jdbcType=VARCHAR},
+		    </if>
+		    <if test="adminAdmints != null">
+			    #{adminAdmints,jdbcType=VARCHAR},
+		    </if>
+		    <if test="adminAdminbz != null">
+			    #{adminAdminbz,jdbcType=VARCHAR},
+		    </if>
+		    <if test="adminAdminarea != null">
+			    #{adminAdminarea,jdbcType=VARCHAR},
+		    </if>
+
+			<if test="loginDate != null">
+				#{loginDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="loginAddre != null">
+				#{loginAddre,jdbcType=VARCHAR},
+			</if>
+			<if test="initDate != null">
+				#{initDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="initAddr != null">
+				#{initAddr,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="update" parameterType="Admin">
+		update an_admin
+		<set>
+			<if test="adminName != null">
+				admin_name = #{adminName,jdbcType=VARCHAR},
+			</if>
+			<if test="adminPwd != null">
+				admin_pwd = #{adminPwd,jdbcType=VARCHAR},
+			</if>
+			<if test="adminTel != null">
+				admin_tel = #{adminTel,jdbcType=VARCHAR},
+			</if>
+			<if test="adminPic != null">
+				admin_pic = #{adminPic,jdbcType=VARCHAR},
+			</if>
+			<if test="adminState != null">
+				admin_state = #{adminState,jdbcType=VARCHAR},
+			</if>
+			<if test="adminLanguage != null">
+				admin_language = #{adminLanguage,jdbcType=VARCHAR},
+			</if>
+			<if test="adminIsDisplay != null">
+				admin_is_display = #{adminIsDisplay,jdbcType=VARCHAR},
+			</if>
+			<if test="adminAdministrate != null">
+				admin_administrate=#{adminAdministrate,jdbcType=VARCHAR},
+			</if>
+			
+			<if test="adminAdminuser != null">
+			    admin_adminuser=#{adminAdminuser,jdbcType=VARCHAR},
+		    </if>
+		    <if test="adminAdmindriver != null">
+			    admin_admindriver=#{adminAdmindriver,jdbcType=VARCHAR},
+		    </if>
+		    <if test="adminAdmintj != null">
+			    admin_admintj=#{adminAdmintj,jdbcType=VARCHAR},
+		    </if>
+		    <if test="adminAdminpx != null">
+			    admin_adminpx=#{adminAdminpx,jdbcType=VARCHAR},
+		    </if>
+		    <if test="adminAdminuc != null">
+			    admin_adminuc=#{adminAdminuc,jdbcType=VARCHAR},
+		    </if>
+		    <if test="adminAdmints != null">
+			    admin_admints=#{adminAdmints,jdbcType=VARCHAR},
+		    </if>
+		    <if test="adminAdminbz != null">
+			    admin_adminbz=#{adminAdminbz,jdbcType=VARCHAR},
+		    </if>
+		    <if test="adminAdminarea != null">
+			    admin_adminarea=#{adminAdminarea,jdbcType=VARCHAR},
+		    </if>
+			
+			<if test="loginDate != null">
+				login_date = #{loginDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="loginAddre != null">
+				login_addre = #{loginAddre,jdbcType=VARCHAR},
+			</if>
+			<if test="initDate != null">
+				init_date = #{initDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="initAddr != null">
+				init_addr = #{initAddr,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+</mapper>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+	http://www.springframework.org/schema/tx
+	http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-4.3.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+	http://www.springframework.org/schema/mvc
+	http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd">
+	
+	<!-- 扫描注解文件 -->
+	<context:component-scan base-package="com.product">
+		<context:exclude-filter type="annotation" expression="org.springframework.web.bind.annotation.RestController"/>
+	</context:component-scan>
+	
+	<!-- 配置数据源 -->
+	<context:property-placeholder location="classpath:jdbc.properties" />
+	<bean id="dataSources" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+		<!-- 基本属性 driverClassName、url、user、password -->
+		<property name="driverClassName" value="${master.jdbc.driverClassName}" />
+		<property name="url" value="${master.jdbc.url}" />
+		<property name="username" value="${master.jdbc.username}" />
+		<property name="password" value="${master.jdbc.password}" />
+		
+		<!-- 配置初始化大小、最大、最小 -->
+		<property name="initialSize" value="${master.jdbc.initialSize}" />
+		<property name="maxActive" value="${master.jdbc.maxActive}" />
+		<property name="minIdle" value="${master.jdbc.minIdle}" />
+		
+		<!-- 配置获取链接等待超时的时间 -->
+		<property name="maxWait" value="${master.jdbc.maxWait}" />
+		
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲链接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="${master.jdbc.timeBetweenEvictionRunsMillis}" />
+		
+		<!-- 配置一个链接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis" value="${master.jdbc.minEvictableIdleTimeMillis}" />
+		
+		<property name="validationQuery" value="${master.jdbc.validationQuery}" />
+		<property name="testWhileIdle" value="${master.jdbc.testWhileIdle}" />
+		<property name="testOnBorrow" value="${master.jdbc.testOnBorrow}" />
+		<property name="testOnReturn" value="${master.jdbc.testOnReturn}" />
+		
+		<!-- 打开PSCache，并指定每个链接上PSCache的大小 -->
+		<property name="poolPreparedStatements" value="${master.jdbc.poolPreparedStatements}" />
+		<property name="maxPoolPreparedStatementPerConnectionSize" value="${master.jdbc.maxPoolPreparedStatementPerConnectionSize}" />
+		
+		<property name="removeAbandoned" value="${master.jdbc.removeAbandoned}" />
+		<property name="removeAbandonedTimeout" value="${master.jdbc.removeAbandonedTimeout}" />
+		<property name="logAbandoned" value="${master.jdbc.logAbandoned}" />
+		
+		<!-- 配置监控统计拦截的filter -->
+		<property name="filters" value="stat,config" />
+		<property name="connectionProperties" value="config.decrypt=true;config.decrypt.key=${master.jdbc.publickey}" />
+	</bean>
+	
+	<!-- 配置数据工厂 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSources" />
+		<property name="configLocation" value="classpath:mybatis.xml" />
+		<property name="mapperLocations" value="classpath*:com/product/mapper/*-Mapper.xml" />
+		<property name="typeAliasesPackage" value="com.product.bean" />
+	</bean>
+	
+	<!-- 配置事务管理器 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSources" />
+	</bean>
+	
+	<!--  启动事务注解方式 -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	
+	<!-- 配置事务通知属性 -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="delete*" read-only="false" propagation="REQUIRED" isolation="READ_COMMITTED" />
+			<tx:method name="update*" read-only="false" propagation="REQUIRED" isolation="READ_COMMITTED" />
+			<tx:method name="save*" read-only="false" propagation="REQUIRED" isolation="READ_COMMITTED" />
+			<tx:method name="get*" read-only="true" propagation="REQUIRED" isolation="DEFAULT" />
+			<tx:method name="page*" read-only="true" propagation="REQUIRED" isolation="DEFAULT" />
+			<tx:method name="list*" read-only="true" propagation="REQUIRED" isolation="DEFAULT" />
+			<tx:method name="*" read-only="false" propagation="REQUIRED" isolation="READ_COMMITTED" />
+		</tx:attributes>
+	</tx:advice>
+	
+	<!-- 配置事务切点 -->
+	<aop:config>
+		<aop:pointcut expression="execution(* com.product.service.impl.*.*(..))" id="txPointcut" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut" />
+	</aop:config>
+	
+	<!-- 配置映射文件和接口 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.product.dao" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+	</bean>
+	
+	<!-- 配置请求映射 -->
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<ref bean="json-converters"/>
+				<ref bean="string-converters"/>
+			</list>
+		</property>
+		<property name="ignoreDefaultModelOnRedirect" value="true" />
+	</bean>
+	<bean id="string-converters" class="org.springframework.http.converter.StringHttpMessageConverter"><!-- 处理字符串 -->
+		<constructor-arg value="UTF-8" />
+	</bean>
+	<bean id="json-converters" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"><!-- 处理json -->
+		<property name="objectMapper">
+			<bean class="com.github.miemiedev.mybatis.paginator.jackson2.PageListJsonMapper"/>
+		</property>
+	</bean>
+	
+	<!-- 文件上传配置 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding" value="UTF-8" />
+		<property name="maxUploadSize" value="104857600" />
+		<property name="maxInMemorySize" value="4096" />
+	</bean>
+	
+	<!-- 管理静态资源 -->
+	<mvc:resources location="/file/" mapping="/file/**" />
+	<mvc:resources location="/WEB-INF/resources/" mapping="/resources/**" />
+</beans>

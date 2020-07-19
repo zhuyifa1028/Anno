@@ -1,0 +1,981 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.product.dao.DriverDao">
+	<resultMap id="base_result" type="Driver">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="driver_openid" jdbcType="VARCHAR" property="driverOpenid" />
+		<result column="driver_fyffirm" jdbcType="VARCHAR" property="driverFyffirm" />
+	    <result column="driver_uaffirm" jdbcType="VARCHAR" property="driverUaffirm" />
+	    <result column="driver_sendu" jdbcType="VARCHAR" property="driverSendu" />
+		<result column="driver_utel" jdbcType="VARCHAR" property="driverUtel" />
+		<result column="driver_id" jdbcType="INTEGER" property="driverId" />		
+		<result column="driver_leavel" jdbcType="VARCHAR" property="driverLeavel" />
+		<result column="driver_beizhu" jdbcType="VARCHAR" property="driverBeizhu" />
+		<result column="driver_name" jdbcType="VARCHAR" property="driverName" />
+		<result column="driver_usname" jdbcType="VARCHAR" property="driverUsname" />
+		<result column="driver_pwd" jdbcType="VARCHAR" property="driverPwd" />
+		<result column="driver_tel" jdbcType="VARCHAR" property="driverTel" />
+		<result column="driver_idcard" jdbcType="VARCHAR" property="driverIdcard" />
+		<result column="driver_carnum" jdbcType="VARCHAR" property="driverCarnum" />
+		<result column="driver_carname" jdbcType="VARCHAR" property="driverCarname" />
+		<result column="driver_headpic" jdbcType="VARCHAR" property="driverHeadpic" />
+		<result column="driver_state" jdbcType="VARCHAR" property="driverState" />
+		<result column="driver_milepic" jdbcType="VARCHAR" property="driverMilepic" />
+		<result column="driver_startmile" jdbcType="DOUBLE" property="driverStartmile" />
+		<result column="driver_date" jdbcType="TIMESTAMP"
+			property="driverDate" />
+		<result column="driver_clock" jdbcType="VARCHAR" property="driverClock" />
+		<result column="driver_leavemile" jdbcType="DOUBLE" property="driverLeavemile" />
+		<result column="driver_leavedate" jdbcType="TIMESTAMP"
+			property="driverLeavedate" />
+		<result column="driver_leavemileuser" jdbcType="DOUBLE"
+			property="driverLeavemileuser" />
+		<result column="driver_leavedateuser" jdbcType="TIMESTAMP"
+			property="driverLeavedateuser" />
+		<result column="driver_backmileuser" jdbcType="DOUBLE"
+			property="driverBackmileuser" />
+		<result column="driver_backdateuser" jdbcType="TIMESTAMP"
+			property="driverBackdateuser" />
+		<result column="driver_backmile" jdbcType="DOUBLE" property="driverBackmile" />
+		<result column="driver_backdate" jdbcType="TIMESTAMP" property="driverBackdate" />
+		<result column="driver_milenow" jdbcType="DOUBLE" property="driverMilenow" />
+		<result column="driver_gastotal" jdbcType="DOUBLE" property="driverGastotal" />
+		<result column="driver_gasrmbtotal" jdbcType="DOUBLE"
+			property="driverGasrmbtotal" />
+		<result column="driver_paytype" jdbcType="VARCHAR" property="driverPaytype" />
+		<result column="driver_overtimehours" jdbcType="DOUBLE"
+			property="driverOvertimehours" />
+		<result column="driver_overtimetype" jdbcType="VARCHAR"
+			property="driverOvertimetype" />
+		<result column="driver_overtimeusecar" jdbcType="VARCHAR"
+			property="driverOvertimeusecar" />
+		<result column="driver_overtimermbtotal" jdbcType="DOUBLE"
+			property="driverOvertimermbtotal" />
+		<result column="driver_rmbassume" jdbcType="VARCHAR" property="driverRmbassume" />
+		<result column="driver_rmbgoal" jdbcType="VARCHAR" property="driverRmbgoal" />
+		<result column="driver_rmbtype" jdbcType="VARCHAR" property="driverRmbtype" />
+		<result column="driver_rmb" jdbcType="DOUBLE" property="driverRmb" />
+		<result column="driver_rmbtotal" jdbcType="DOUBLE" property="driverRmbtotal" />
+		<result column="driver_reason" jdbcType="VARCHAR" property="driverReason" />
+		<result column="driver_jcarnum" jdbcType="VARCHAR" property="driverJcarnum" />
+		<result column="driver_jcarmile" jdbcType="DOUBLE" property="driverJcarmile" />
+		<result column="driver_newcarnum" jdbcType="VARCHAR" property="driverNewcarnum" />
+		<result column="driver_newcarmile" jdbcType="DOUBLE" property="driverNewcarmile" />
+		<result column="driver_isdisplay" jdbcType="VARCHAR" property="driverIsdisplay" />
+		<result column="driver_language" jdbcType="VARCHAR" property="driverLanguage" />
+		<result column="driver_gasrpaytype" jdbcType="VARCHAR"
+			property="driverGasrpaytype" />
+			<result column="driver_trainstate" jdbcType="VARCHAR"
+			property="driverTrainstate" />
+		<result column="login_date" jdbcType="TIMESTAMP" property="loginDate" />
+		<result column="login_addre" jdbcType="VARCHAR" property="loginAddre" />
+		<result column="init_date" jdbcType="TIMESTAMP" property="initDate" />
+		<result column="init_addr" jdbcType="VARCHAR" property="initAddr" />
+	</resultMap>
+
+	<sql id="base_columns_list">
+		id,driver_openid,driver_fyffirm,driver_uaffirm,driver_sendu, driver_utel,driver_id,driver_leavel,
+		driver_beizhu ,driver_name,driver_usname,driver_pwd,
+		driver_tel,driver_idcard,driver_carnum,driver_carname, driver_headpic,driver_state,
+		driver_milepic,driver_startmile,driver_date,driver_clock,driver_leavemile,
+		driver_leavedate,
+		driver_leavemileuser, driver_leavedateuser,
+		driver_backmileuser,driver_backdateuser,driver_backmile,
+		driver_backdate, driver_milenow,driver_gastotal, driver_gasrmbtotal,
+		driver_paytype,driver_rmbassume,
+		driver_overtimehours,driver_overtimetype,
+		driver_overtimeusecar,driver_overtimermbtotal,
+		driver_rmbgoal,driver_rmbtype,driver_rmb,
+		driver_rmbtotal,driver_reason,driver_jcarnum,
+		driver_jcarmile,driver_newcarnum, driver_newcarmile,driver_isdisplay,
+		driver_language,driver_gasrpaytype,driver_trainstate,
+		login_date,login_addre,init_date, init_addr
+	</sql>
+
+	<sql id="_columns_list">
+		id,driver_openid,driver_fyffirm,driver_uaffirm,driver_sendu, driver_utel,driver_leavel,driver_beizhu,
+		driver_name,driver_usname, driver_pwd,driver_tel,driver_idcard,driver_carnum,
+		driver_carname, driver_headpic,driver_state,
+		driver_milepic,driver_startmile,driver_date,
+		driver_clock,driver_leavemile, driver_leavedate,
+		driver_leavemileuser,driver_leavedateuser,
+		driver_backmileuser,driver_backdateuser,driver_backmile,
+		driver_backdate, driver_milenow,driver_gastotal, driver_gasrmbtotal,
+		driver_paytype,driver_rmbassume,
+		driver_overtimehours,driver_overtimetype,
+		driver_overtimeusecar,driver_overtimermbtotal,
+		driver_rmbgoal,driver_rmbtype,driver_rmb,
+		driver_rmbtotal,driver_reason,driver_jcarnum,
+		driver_jcarmile,driver_newcarnum, driver_newcarmile,driver_isdisplay,
+		driver_language,driver_gasrpaytype,driver_trainstate,
+		login_date,login_addre,init_date, init_addr
+	</sql>
+
+	<!-- 关键字规则(EQ:等于、GT:大于、LT:小于、GE:大于等于、LE:小于等于) -->
+	<sql id="base_columns_where">
+		<if test="id != null">
+			and id = #{id}
+		</if>
+		<if test="driverOpenid != null and driverOpenid != ''">
+			and driver_openid = #{driverOpenid}
+		</if>
+		<if test="gt_id != null and gt_id != ''">
+			<![CDATA[and id > #{gt_id}]]>
+		</if>
+		<if test="lt_id != null and lt_id != ''">
+			<![CDATA[and id < #{lt_id}]]>
+		</if>
+		<if test="ge_id != null and ge_id != ''">
+			<![CDATA[and id >= #{ge_id}]]>
+		</if>
+		<if test="le_id != null and le_id != ''">
+			<![CDATA[and id <= #{lt_id}]]>
+		</if>	
+		<if test="driverFyffirm != null and driverFyffirm != ''">
+			and driver_fyffirm = #{driverFyffirm}
+		</if>
+		<if test="driverUaffirm != null and driverUaffirm != ''">
+			and driver_uaffirm = #{driverUaffirm}
+		</if>
+		<if test="driverSendu != null and driverSendu != ''">
+			and driver_sendu = #{driverSendu}
+		</if>
+		<if test="driverUtel != null and driverUtel != ''">
+			and driver_utel = #{driverUtel}
+		</if>
+		<if test="driverId != null and driverId != ''">
+			and driver_id like CONCAT('%',#{driverId},'%')
+		</if>
+		<if test="driverLeavel != null and driverLeavel != ''">
+			and driver_leavel =#{driverLeavel}
+		</if>
+		<if test="driverBeizhu != null and driverBeizhu != ''">
+			and driver_beizhu =#{driverBeizhu}
+		</if>
+		<if test="driverName != null and driverName != ''">
+			and driver_name like CONCAT('%',#{driverName},'%')
+		</if>
+		<if test="driverUsname != null and driverUsname != ''">
+			and driver_usname like CONCAT('%',#{driverUsname},'%')
+		</if>
+		<if test="driverPwd != null and driverPwd != ''">
+			and driver_pwd = #{driverPwd}
+		</if>
+		<if test="driverTel != null and driverTel != ''">
+			and driver_tel like CONCAT('%',#{driverTel},'%')
+		</if>
+		<if test="driverIdcard != null and driverIdcard != ''">
+			and driver_idcard = #{driverIdcard}
+		</if>
+		<if test="driverCarnum != null and driverCarnum != ''">
+			and driver_carnum like CONCAT('%',#{driverCarnum},'%')
+		</if>
+		<if test="driverCarname != null and driverCarname != ''">
+			and driver_carname = #{driverCarname}
+		</if>
+		<if test="driverHeadpic != null and driverHeadpic != ''">
+			and driver_headpic = #{driverHeadpic}
+		</if>
+		<if test="driverState != null and driverState != ''">
+			and driver_state = #{driverState}
+		</if>
+		<if test="driverMilepic != null and driverMilepic != ''">
+			and driver_milepic = #{driverMilepic}
+		</if>
+		<if test="driverStartmile != null and driverStartmile != ''">
+			and driver_startmile = #{driverStartmile}
+		</if>
+		<if test="driverDate != null and driverDate != ''">
+			and driver_date = #{driverDate}
+		</if>
+		
+		<if test="eq_date != null and eq_date != ''">
+			<![CDATA[and DATEDIFF(driver_date, #{eq_date}) = 0]]>
+		</if>
+		<if test="gt_date != null and gt_date != ''">
+			<![CDATA[and UNIX_TIMESTAMP(driver_date) > UNIX_TIMESTAMP(#{gt_date})]]>
+		</if>
+		<if test="lt_date != null and lt_date != ''">
+			<![CDATA[and UNIX_TIMESTAMP(driver_date) < UNIX_TIMESTAMP(#{lt_date})]]>
+		</if>
+		<if test="ge_date != null and ge_date != ''">
+			<![CDATA[and UNIX_TIMESTAMP(driver_date) >= UNIX_TIMESTAMP(#{ge_date})]]>
+		</if>
+		<if test="le_date != null and le_date != ''">
+			<![CDATA[and UNIX_TIMESTAMP(driver_date) <= UNIX_TIMESTAMP(#{le_date})]]>
+		</if>
+		
+		<if test="driverClock != null and driverClock != ''">
+			and driver_clock = #{driverClock}
+		</if>
+		<if test="driverLeavemile != null and driverLeavemile != ''">
+			and driver_leavemile = #{driverLeavemile}
+		</if>
+		
+		<if test="eq_leavedate != null and eq_leavedate != ''">
+			<![CDATA[and DATEDIFF(driver_leavedate, #{eq_leavedate}) = 0]]>
+		</if>
+		<if test="gt_leavedate != null and gt_leavedate != ''">
+			<![CDATA[and UNIX_TIMESTAMP(driver_leavedate) > UNIX_TIMESTAMP(#{gt_leavedate})]]>
+		</if>
+		<if test="lt_leavedate != null and lt_leavedate != ''">
+			<![CDATA[and UNIX_TIMESTAMP(driver_leavedate) < UNIX_TIMESTAMP(#{lt_leavedate})]]>
+		</if>
+		<if test="ge_leavedate != null and ge_leavedate != ''">
+			<![CDATA[and UNIX_TIMESTAMP(driver_leavedate) >= UNIX_TIMESTAMP(#{ge_leavedate})]]>
+		</if>
+		<if test="le_leavedate != null and le_leavedate != ''">
+			<![CDATA[and UNIX_TIMESTAMP(driver_leavedate) <= UNIX_TIMESTAMP(#{le_leavedate})]]>
+		</if>
+		
+		<if test="driverLeavemileuser != null and driverLeavemileuser != ''">
+			and driver_leavemileuser = #{driverLeavemileuser}
+		</if>
+		<if test="driverLeavedateuser != null and driverLeavedateuser != ''">
+			and driver_leavedateuser = #{driverLeavedateuser}
+		</if>
+		<if test="driverBackmileuser != null and driverBackmileuser != ''">
+			and driver_backmileuser = #{driverBackmileuser}
+		</if>
+		<if test="driverBackdateuser != null and driverBackdateuser != ''">
+			and driver_backdateuser = #{driverBackdateuser}
+		</if>
+		<if test="driverBackmile != null and driverBackmile != ''">
+			and driver_backmile = #{driverBackmile}
+		</if>
+		
+		<if test="eq_backdate != null and eq_backdate != ''">
+			<![CDATA[and DATEDIFF(driver_backdate, #{eq_backdate}) = 0]]>
+		</if>
+		<if test="gt_backdate != null and gt_backdate != ''">
+			<![CDATA[and UNIX_TIMESTAMP(driver_backdate) > UNIX_TIMESTAMP(#{gt_backdate})]]>
+		</if>
+		<if test="lt_backdate != null and lt_backdate != ''">
+			<![CDATA[and UNIX_TIMESTAMP(driver_backdate) < UNIX_TIMESTAMP(#{lt_backdate})]]>
+		</if>
+		<if test="ge_backdate != null and ge_backdate != ''">
+			<![CDATA[and UNIX_TIMESTAMP(driver_backdate) >= UNIX_TIMESTAMP(#{ge_backdate})]]>
+		</if>
+		<if test="le_backdate != null and le_backdate != ''">
+			<![CDATA[and UNIX_TIMESTAMP(driver_backdate) <= UNIX_TIMESTAMP(#{le_backdate})]]>
+		</if>
+		
+		<if test="driverMilenow != null and driverMilenow != ''">
+			and driver_milenow = #{driverMilenow}
+		</if>
+		<if test="driverGastotal != null and driverGastotal != ''">
+			and driver_gastotal = #{driverGastotal}
+		</if>
+		<if test="driverGasrmbtotal != null and driverGasrmbtotal != ''">
+			and driver_gasrmbtotal = #{driverGasrmbtotal}
+		</if>
+		<if test="driverPaytype != null and driverPaytype != ''">
+			and driver_paytype = #{driverPaytype}
+		</if>
+		<if test="driverOvertimehours != null and driverOvertimehours != ''">
+			and driver_overtimehours = #{driverOvertimehours}
+		</if>
+		<if test="driverOvertimetype != null and driverOvertimetype != ''">
+			and driver_overtimetype = #{driverOvertimetype}
+		</if>
+		<if test="driverOvertimeusecar != null and driverOvertimeusecar != ''">
+			and driver_overtimeusecar = #{driverOvertimeusecar}
+		</if>
+		<if test="driverOvertimermbtotal != null and driverOvertimermbtotal != ''">
+			and driver_overtimermbtotal = #{driverOvertimermbtotal}
+		</if>
+		<if test="driverRmbassume != null and driverRmbassume != ''">
+			and driver_rmbassume = #{driverRmbassume}
+		</if>
+		<if test="driverRmbgoal != null and driverRmbgoal != ''">
+			and driver_rmbgoal = #{driverRmbgoal}
+		</if>
+		<if test="driverRmbtype != null and driverRmbtype != ''">
+			and driver_rmbtype = #{driverRmbtype}
+		</if>
+		<if test="driverRmb != null and driverRmb != ''">
+			and driver_rmb = #{driverRmb}
+		</if>
+		<if test="driverRmbtotal != null and driverRmbtotal != ''">
+			and driver_rmbtotal = #{driverRmbtotal}
+		</if>
+		<if test="driverReason != null and driverReason != ''">
+			and driver_reason = #{driverReason}
+		</if>
+		<if test="driverJcarnum != null and driverJcarnum != ''">
+			and driver_jcarnum = #{driverJcarnum}
+		</if>
+		<if test="driverJcarmile != null and driverJcarmile != ''">
+			and driver_jcarmile = #{driverJcarmile}
+		</if>
+		<if test="driverNewcarnum != null and driverNewcarnum != ''">
+			and driver_newcarnum = #{driverNewcarnum}
+		</if>
+		<if test="driverNewcarmile != null and driverNewcarmile != ''">
+			and driver_newcarmile = #{driverNewcarmile}
+		</if>
+		<if test="driverIsdisplay != null and driverIsdisplay != ''">
+			and driver_isdisplay = #{driverIsdisplay}
+		</if>
+		<if test="driverLanguage != null and driverLanguage != ''">
+			and driver_language = #{driverLanguage}
+		</if>
+		<if test="driverGasrpaytype != null and driverGasrpaytype != ''">
+			and driver_gasrpaytype = #{driverGasrpaytype}
+		</if>
+		<if test="driverTrainstate != null and driverTrainstate != ''">
+			and driver_trainstate = #{driverTrainstate}
+		</if>
+		<if test="eq_ldate != null and eq_ldate != ''">
+			<![CDATA[and DATEDIFF(login_date, #{eq_ldate}) = 0]]>
+		</if>
+		<if test="gt_ldate != null and gt_ldate != ''">
+			<![CDATA[and UNIX_TIMESTAMP(login_date) > UNIX_TIMESTAMP(#{gt_ldate})]]>
+		</if>
+		<if test="lt_ldate != null and lt_ldate != ''">
+			<![CDATA[and UNIX_TIMESTAMP(login_date) < UNIX_TIMESTAMP(#{lt_ldate})]]>
+		</if>
+		<if test="ge_ldate != null and ge_ldate != ''">
+			<![CDATA[and UNIX_TIMESTAMP(login_date) >= UNIX_TIMESTAMP(#{ge_ldate})]]>
+		</if>
+		<if test="le_ldate != null and le_ldate != ''">
+			<![CDATA[and UNIX_TIMESTAMP(login_date) <= UNIX_TIMESTAMP(#{le_ldate})]]>
+		</if>
+		<if test="eq_idate != null and eq_idate != ''">
+			<![CDATA[and DATEDIFF(init_date, #{eq_idate}) = 0]]>
+		</if>
+		<if test="gt_idate != null and gt_idate != ''">
+			<![CDATA[and UNIX_TIMESTAMP(init_date) > UNIX_TIMESTAMP(#{gt_idate})]]>
+		</if>
+		<if test="lt_idate != null and lt_idate != ''">
+			<![CDATA[and UNIX_TIMESTAMP(init_date) < UNIX_TIMESTAMP(#{lt_idate})]]>
+		</if>
+		<if test="ge_idate != null and ge_idate != ''">
+			<![CDATA[and UNIX_TIMESTAMP(init_date) >= UNIX_TIMESTAMP(#{ge_idate})]]>
+		</if>
+		<if test="le_idate != null and le_idate != ''">
+			<![CDATA[and UNIX_TIMESTAMP(init_date) <= UNIX_TIMESTAMP(#{le_idate})]]>
+		</if>
+		<if test="iaddr != null and iaddr != ''">
+			and init_addr = #{iaddr}
+		</if>
+	</sql>
+
+	<sql id="base_columns_order_by">
+		<trim suffixOverrides="," prefix="order by ">
+			<if test="order_id != null and order_id != ''">
+				<choose>
+					<when test="order_id == 'desc'">
+						id desc,
+					</when>
+					<otherwise>
+						id asc,
+					</otherwise>
+				</choose>
+			</if>
+			<if test="order_date != null and order_date != ''">
+				<choose>
+					<when test="order_date == 'desc'">
+						driver_date desc,
+					</when>
+					<otherwise>
+						driver_date asc,
+					</otherwise>
+				</choose>
+			</if>
+		</trim>
+	</sql>
+
+	<select id="get" parameterType="map" resultMap="base_result">
+		select
+		<include refid="base_columns_list" />
+		from
+		an_driver
+		<where>
+			<include refid="base_columns_where" />
+		</where>
+		<include refid="base_columns_order_by" />
+	</select>
+
+	<select id="count" parameterType="java.util.Map" resultType="java.lang.Long">
+		select
+		count(*)
+		from
+		an_driver
+		<where>
+			<include refid="base_columns_where" />
+		</where>
+	</select>
+
+	<select id="list" parameterType="map" resultMap="base_result">
+		select
+		<include refid="base_columns_list" />
+		from
+		an_driver
+		<where>
+			<include refid="base_columns_where" />
+		</where>
+		<include refid="base_columns_order_by" />
+	</select>
+
+
+	<select id="page" parameterType="map" resultMap="base_result">
+		select
+		<include refid="base_columns_list" />
+		from
+		an_driver
+		<where>
+			<include refid="base_columns_where" />
+		</where>
+		<include refid="base_columns_order_by" />
+	</select>
+	
+
+	<insert id="save" keyColumn="id" keyProperty="id" parameterType="Driver"
+		useGeneratedKeys="true">
+		insert into an_driver
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="driverOpenid != null">
+			    driver_openid ,
+		    </if>
+			<if test="driverFyffirm != null">
+			    driver_fyffirm ,
+		    </if>
+			<if test="driverUaffirm != null">
+				driver_uaffirm,
+			</if>
+			<if test="driverSendu != null">
+				driver_sendu,
+			</if>
+			
+			<if test="driverUtel != null">
+				driver_utel,
+			</if>
+			<if test="driverId != null">
+				driver_id,
+			</if>
+			<if test="driverLeavel != null">
+				driver_leavel,
+			</if>
+			<if test="driverBeizhu != null">
+				driver_beizhu,
+			</if>
+			<if test="driverName != null">
+				driver_name,
+			</if>
+			<if test="driverUsname != null">
+				driver_usname,
+			</if>
+			<if test="driverPwd != null">
+				driver_pwd,
+			</if>
+			<if test="driverTel != null">
+				driver_tel,
+			</if>
+			<if test="driverIdcard != null">
+				driver_idcard,
+			</if>
+			<if test="driverCarnum != null">
+				driver_carnum,
+			</if>
+			<if test="driverCarname != null">
+				driver_carname,
+			</if>
+			<if test="driverHeadpic != null">
+				driver_headpic,
+			</if>
+			<if test="driverState != null">
+				driver_state,
+			</if>
+
+			<if test="driverMilepic != null ">
+				driver_milepic,
+			</if>
+			<if test="driverStartmile != null ">
+				driver_startmile ,
+			</if>
+			<if test="driverDate != null ">
+				driver_date ,
+			</if>
+			<if test="driverClock != null ">
+				driver_clock ,
+			</if>
+			<if test="driverLeavemile != null ">
+				driver_leavemile ,
+			</if>
+			<if test="driverLeavedate != null ">
+				driver_leavedate ,
+			</if>
+			<if test="driverLeavemileuser != null ">
+				driver_leavemileuser ,
+			</if>
+			<if test="driverLeavedateuser != null ">
+				driver_leavedateuser ,
+			</if>
+			<if test="driverBackmileuser != null ">
+				driver_backmileuser ,
+			</if>
+			<if test="driverBackdateuser != null">
+				driver_backdateuser ,
+			</if>
+			<if test="driverBackmile != null ">
+				driver_backmile ,
+			</if>
+			<if test="driverBackdate != null ">
+				driver_backdate,
+			</if>
+			<if test="driverMilenow != null ">
+				driver_milenow ,
+			</if>
+			<if test="driverGastotal != null ">
+				driver_gastotal ,
+			</if>
+			<if test="driverGasrmbtotal != null ">
+				driver_gasrmbtotal ,
+			</if>
+			<if test="driverPaytype != null ">
+				driver_paytype,
+			</if>
+			<if test="driverOvertimehours != null ">
+				driver_overtimehours ,
+			</if>
+			<if test="driverOvertimetype != null ">
+				driver_overtimetype ,
+			</if>
+			<if test="driverOvertimeusecar != null ">
+				driver_overtimeusecar ,
+			</if>
+			<if test="driverOvertimermbtotal != null ">
+				driver_overtimermbtotal ,
+			</if>
+			<if test="driverRmbassume != null">
+				driver_rmbassume ,
+			</if>
+			<if test="driverRmbgoal != null ">
+				driver_rmbgoal,
+			</if>
+			<if test="driverRmbtype != null ">
+				driver_rmbtype ,
+			</if>
+			<if test="driverRmb != null">
+				driver_rmb ,
+			</if>
+			<if test="driverRmbtotal != null ">
+				driver_rmbtotal ,
+			</if>
+			<if test="driverReason != null">
+				driver_reason ,
+			</if>
+			<if test="driverJcarnum != null ">
+				driver_jcarnum ,
+			</if>
+			<if test="driverJcarmile != null ">
+				driver_jcarmile ,
+			</if>
+			<if test="driverNewcarnum != null ">
+				driver_newcarnum ,
+			</if>
+			<if test="driverNewcarmile != null ">
+				driver_newcarmile ,
+			</if>
+			<if test="driverIsdisplay != null ">
+				driver_isdisplay ,
+			</if>
+			<if test="driverLanguage != null ">
+				driver_language ,
+			</if>
+			<if test="driverGasrpaytype != null ">
+				driver_gasrpaytype ,
+			</if>
+			<if test="driverTrainstate != null ">
+				driver_trainstate ,
+			</if>
+
+			<if test="loginDate != null">
+				login_date,
+			</if>
+			<if test="loginAddre != null">
+				login_addre,
+			</if>
+			<if test="initDate != null">
+				init_date,
+			</if>
+			<if test="initAddr != null">
+				init_addr,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>	
+			<if test="driverOpenid != null">
+			    #{driverOpenid,jdbcType=VARCHAR}
+		    </if>
+			<if test="driverFyffirm != null">
+			    #{driverFyffirm,jdbcType=VARCHAR}
+		    </if>
+			<if test="driverUaffirm != null">
+				#{driverUaffirm,jdbcType=VARCHAR},
+			</if>
+			<if test="driverSendu != null">
+				#{driverSendu,jdbcType=VARCHAR},
+			</if>
+			<if test="driverUtel != null">
+				#{driverUtel,jdbcType=VARCHAR},
+			</if>
+			<if test="driverId != null">
+				#{driverId,jdbcType=INTEGER},
+			</if>
+			<if test="driverLeavel != null">
+				#{driverLeavel,jdbcType=VARCHAR},
+			</if>
+			<if test="driverBeizhu != null">
+				#{driverBeizhu,jdbcType=VARCHAR},
+			</if>
+			<if test="driverName != null">
+				#{driverName,jdbcType=VARCHAR},
+			</if>
+			<if test="driverUsname != null">
+				#{driverUsname,jdbcType=VARCHAR},
+			</if>
+			
+			<if test="driverPwd != null">
+				#{driverPwd,jdbcType=VARCHAR},
+			</if>
+			<if test="driverTel != null">
+				#{driverTel,jdbcType=VARCHAR},
+			</if>
+			<if test="driverIdcard != null">
+				#{driverIdcard,jdbcType=VARCHAR},
+			</if>
+			<if test="driverCarnum != null">
+				#{driverCarnum,jdbcType=VARCHAR},
+			</if>
+			<if test="driverCarname != null">
+				#{driverCarname,jdbcType=INTEGER},
+			</if>
+			<if test="driverHeadpic != null">
+				#{driverHeadpic,jdbcType=VARCHAR},
+			</if>
+			<if test="driverState != null">
+				#{driverState,jdbcType=INTEGER},
+			</if>
+
+			<if test="driverMilepic != null">
+				#{driverMilepic,jdbcType=VARCHAR},
+			</if>
+			<if test="driverStartmile != null">
+				#{driverStartmile,jdbcType=DOUBLE},
+			</if>
+			<if test="driverDate != null">
+				#{driverDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="driverClock != null">
+				#{driverClock,jdbcType=VARCHAR},
+			</if>
+
+			<if test="driverLeavemile != null">
+				#{driverLeavemile,jdbcType=DOUBLE},
+			</if>
+			<if test="driverLeavedate != null">
+				#{driverLeavedate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="driverLeavemileuser != null">
+				#{driverLeavemileuser,jdbcType=DOUBLE},
+			</if>
+			<if test="driverLeavedateuser != null">
+				#{driverLeavedateuser,jdbcType=TIMESTAMP},
+			</if>
+			<if test="driverBackmileuser != null">
+				#{driverBackmileuser,jdbcType=DOUBLE},
+			</if>
+			<if test="driverBackdateuser != null">
+				#{driverBackdateuser,jdbcType=TIMESTAMP},
+			</if>
+			<if test="driverBackmile != null">
+				#{driverBackmile,jdbcType=DOUBLE},
+			</if>
+			<if test="driverBackdate != null">
+				#{driverBackdate,jdbcType=TIMESTAMP},
+			</if>
+
+			<if test="driverMilenow != null">
+				#{driverMilenow,jdbcType=DOUBLE},
+			</if>
+			<if test="driverGastotal != null">
+				#{driverGastotal,jdbcType=DOUBLE},
+			</if>
+			<if test="driverGasrmbtotal != null">
+				#{driverGasrmbtotal,jdbcType=DOUBLE},
+			</if>
+			<if test="driverPaytype != null">
+				#{driverPaytype,jdbcType=VARCHAR},
+			</if>
+
+			<if test="driverOvertimehours != null">
+				#{driverOvertimehours,jdbcType=DOUBLE},
+			</if>
+			<if test="driverOvertimetype != null">
+				#{driverOvertimetype,jdbcType=VARCHAR},
+			</if>
+			<if test="driverOvertimeusecar != null">
+				#{driverOvertimeusecar,jdbcType=VARCHAR},
+			</if>
+			<if test="driverOvertimermbtotal != null">
+				#{driverOvertimermbtotal,jdbcType=DOUBLE},
+			</if>
+			<if test="driverRmbassume != null">
+				#{driverRmbassume,jdbcType=VARCHAR},
+			</if>
+
+			<if test="driverRmbgoal != null">
+				#{driverRmbgoal,jdbcType=VARCHAR},
+			</if>
+			<if test="driverRmbtype != null">
+				#{driverRmbtype,jdbcType=VARCHAR},
+			</if>
+			<if test="driverRmb != null">
+				#{driverRmb,jdbcType=DOUBLE},
+			</if>
+			<if test="driverRmbtotal != null">
+				#{driverRmbtotal,jdbcType=DOUBLE},
+			</if>
+			<if test="driverReason != null">
+				#{driverReason,jdbcType=VARCHAR},
+			</if>
+			<if test="driverJcarnum != null">
+				#{driverJcarnum,jdbcType=VARCHAR},
+			</if>
+
+			<if test="driverJcarmile != null">
+				#{driverJcarmile,jdbcType=DOUBLE},
+			</if>
+			<if test="driverNewcarnum != null">
+				#{driverNewcarnum,jdbcType=VARCHAR},
+			</if>
+			<if test="driverNewcarmile != null">
+				#{driverNewcarmile,jdbcType=DOUBLE},
+			</if>
+
+			<if test="driverIsdisplay != null">
+				#{driverIsdisplay,jdbcType=VARCHAR},
+			</if>
+			<if test="driverLanguage != null ">
+				#{driverLanguage,jdbcType=VARCHAR},
+			</if>
+			<if test="driverGasrpaytype != null ">
+				#{driverGasrpaytype,jdbcType=VARCHAR},
+			</if>
+			<if test="driverTrainstate != null ">
+				#{driverTrainstate,jdbcType=VARCHAR},
+			</if>
+
+
+			<if test="loginDate != null">
+				#{loginDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="loginAddre != null">
+				#{loginAddre,jdbcType=VARCHAR},
+			</if>
+			<if test="initDate != null">
+				#{initDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="initAddr != null">
+				#{initAddr,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="update" parameterType="Driver">
+		update an_driver
+		<set>
+		    <if test="1==1">
+			    driver_openid = #{driverOpenid,jdbcType=VARCHAR},
+		    </if>
+		    <if test="driverFyffirm != null">
+			    driver_fyffirm = #{driverFyffirm,jdbcType=VARCHAR},
+		    </if>
+            <if test="driverUaffirm != null">
+				driver_uaffirm = #{driverUaffirm,jdbcType=VARCHAR},
+			</if>
+			<if test="driverSendu != null">
+				driver_sendu = #{driverSendu,jdbcType=VARCHAR},
+			</if>
+			
+			<if test="driverUtel != null">
+				driver_utel = #{driverUtel,jdbcType=VARCHAR},
+			</if>
+			<if test="driverId != null">
+				driver_id = #{driverId,jdbcType=INTEGER},
+			</if>
+			<if test="driverLeavel != null">
+				driver_leavel = #{driverLeavel,jdbcType=VARCHAR},
+			</if>
+			<if test="driverBeizhu != null">
+				driver_beizhu = #{driverBeizhu,jdbcType=VARCHAR},
+			</if>
+			<if test="driverName != null">
+				driver_name = #{driverName,jdbcType=VARCHAR},
+			</if>
+			<if test="driverUsname != null">
+				driver_usname = #{driverUsname,jdbcType=VARCHAR},
+			</if>
+			
+			<if test="driverPwd != null">
+				driver_pwd = #{driverPwd,jdbcType=VARCHAR},
+			</if>	
+			<if test="driverTel != null">
+				driver_tel = #{driverTel,jdbcType=VARCHAR},
+			</if>
+			<if test="driverIdcard != null">
+				driver_idcard = #{driverIdcard,jdbcType=VARCHAR},
+			</if>
+			<if test="driverCarnum != null">
+				driver_carnum = #{driverCarnum,jdbcType=VARCHAR},
+			</if>
+			<if test="driverCarname != null">
+				driver_carname = #{driverCarname,jdbcType=INTEGER},
+			</if>
+			<if test="driverHeadpic != null">
+				driver_headpic = #{driverHeadpic,jdbcType=INTEGER},
+			</if>
+			<if test="driverState != null">
+				driver_state = #{driverState,jdbcType=VARCHAR},
+			</if>
+			
+			<if test="driverMilepic != null">
+				driver_milepic = #{driverMilepic,jdbcType=VARCHAR},
+			</if>
+			<if test="driverStartmile  != null">
+				driver_startmile = #{driverStartmile,jdbcType=DOUBLE},
+			</if>	
+			<if test="driverDate != null">
+				driver_date = #{driverDate,jdbcType=TIMESTAMP},
+			</if>
+			
+			<if test="driverClock != null">
+				driver_clock = #{driverClock,jdbcType=VARCHAR},
+			</if>		
+			<if test="driverLeavemile  != null">
+				driver_leavemile = #{driverLeavemile,jdbcType=DOUBLE},
+			</if>
+			<if test="driverLeavedate != null">
+				driver_leavedate = #{driverLeavedate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="driverLeavemileuser  != null">
+				driver_leavemileuser = #{driverLeavemileuser ,jdbcType=DOUBLE},
+			</if>
+			<if test="driverLeavedateuser != null">
+				driver_leavedateuser = #{driverLeavedateuser,jdbcType=TIMESTAMP},
+			</if>
+			<if test="driverBackmileuser != null">
+				driver_backmileuser = #{driverBackmileuser,jdbcType=DOUBLE},
+			</if>
+			<if test="driverBackdateuser != null">
+				driver_backdateuser = #{driverBackdateuser,jdbcType=TIMESTAMP},
+			</if>
+			
+			<if test="driverBackmile != null">
+				driver_backmile = #{driverBackmile,jdbcType=DOUBLE},
+			</if>
+			<if test="driverBackdate != null">
+				driver_backdate = #{driverBackdate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="driverMilenow != null">
+				driver_milenow = #{driverMilenow,jdbcType=DOUBLE},
+			</if>
+			<if test="driverGastotal != null">
+				driver_gastotal = #{driverGastotal,jdbcType=DOUBLE},
+			</if>
+			<if test="driverGasrmbtotal != null">
+				driver_gasrmbtotal =#{driverGasrmbtotal,jdbcType=DOUBLE},
+			</if>
+			
+			<if test="driverPaytype != null">
+				driver_paytype = #{driverPaytype,jdbcType=VARCHAR},
+			</if>
+			<if test="driverOvertimehours != null">
+				driver_overtimehours =#{driverOvertimehours,jdbcType=DOUBLE},
+			</if>
+			<if test="driverOvertimetype != null">
+				driver_overtimetype =#{driverOvertimetype,jdbcType=VARCHAR},
+				
+			</if>
+			<if test="driverOvertimeusecar != null">
+				driver_overtimeusecar =
+				#{driverOvertimeusecar,jdbcType=VARCHAR},
+			</if>
+			<if test="driverOvertimermbtotal != null">
+				driver_overtimermbtotal =#{driverOvertimermbtotal,jdbcType=DOUBLE},
+			</if>
+			<if test="driverRmbassume != null">
+				driver_rmbassume = #{driverRmbassume,jdbcType=VARCHAR},
+			</if>
+			<if test="driverRmbgoal != null">
+				driver_rmbgoal = #{driverRmbgoal,jdbcType=VARCHAR},
+			</if>
+			<if test="driverRmbtype != null">
+				driver_rmbtype = #{driverRmbtype,jdbcType=VARCHAR},
+			</if>
+			<if test="driverRmb != null">
+				driver_rmb = #{driverRmb,jdbcType=DOUBLE},
+			</if>
+			<if test="driverRmbtotal != null">
+				driver_rmbtotal = #{driverRmbtotal,jdbcType=DOUBLE},
+			</if>
+			<if test="driverReason != null">
+				driver_reason = #{driverReason,jdbcType=VARCHAR},
+			</if>
+			<if test="driverJcarnum != null">
+				driver_jcarnum = #{driverJcarnum,jdbcType=VARCHAR},
+			</if>
+
+			<if test="driverJcarmile != null">
+				driver_jcarmile = #{driverJcarmile,jdbcType=DOUBLE},
+			</if>
+			<if test="driverNewcarnum != null">
+				driver_newcarnum = #{driverNewcarnum,jdbcType=VARCHAR},
+			</if>
+			<if test="driverNewcarmile != null">
+				driver_newcarmile = #{driverNewcarmile,jdbcType=DOUBLE},
+			</if>		
+			
+			<if test="driverIsdisplay != null">
+				driver_isdisplay = #{driverIsdisplay,jdbcType=VARCHAR},
+			</if>
+			<if test="driverLanguage != null">
+				driver_language = #{driverLanguage,jdbcType=VARCHAR},
+			</if>
+			<if test="driverGasrpaytype != null">
+				driver_gasrpaytype =#{driverGasrpaytype,jdbcType=VARCHAR},
+			</if>	
+			<if test="driverTrainstate != null">
+				driver_trainstate =
+				#{driverTrainstate,jdbcType=VARCHAR},
+			</if>
+
+			<if test="loginDate != null">
+				login_date = #{loginDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="loginAddre != null">
+				login_addre = #{loginAddre,jdbcType=VARCHAR},
+			</if>
+			<if test="initDate != null">
+				init_date = #{initDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="initAddr != null">
+				init_addr = #{initAddr,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<delete id="del" parameterType="Driver">
+		delete from an_driver
+		where id =
+		#{id,jdbcType=INTEGER}
+	</delete>
+</mapper>

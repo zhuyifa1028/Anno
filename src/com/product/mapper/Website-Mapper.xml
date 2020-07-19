@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.product.dao.WebsiteDao">
+	<resultMap id="base_result" type="Website">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="website_name" jdbcType="VARCHAR" property="websiteName" />
+		<result column="website_domain" jdbcType="VARCHAR" property="websiteDomain" />
+		<result column="website_keywords" jdbcType="VARCHAR" property="websiteKeywords" />
+		<result column="website_description" jdbcType="VARCHAR" property="websiteDescription" />
+		<result column="website_icp" jdbcType="VARCHAR" property="websiteIcp" />
+		<result column="website_faxes" jdbcType="VARCHAR" property="websiteFaxes" />
+		<result column="website_tel" jdbcType="VARCHAR" property="websiteTel" />
+		<result column="website_hotline" jdbcType="VARCHAR" property="websiteHotline" />
+		<result column="website_address" jdbcType="VARCHAR" property="websiteAddress" />
+		<result column="website_protocol" jdbcType="VARCHAR" property="websiteProtocol" />
+		<result column="website_logo" jdbcType="VARCHAR" property="websiteLogo" />
+		<result column="init_date" jdbcType="TIMESTAMP" property="initDate" />
+		<result column="init_addr" jdbcType="VARCHAR" property="initAddr" />
+		<result column="website_config" jdbcType="LONGVARCHAR" property="websiteConfig" />
+	</resultMap>
+	
+	<sql id="base_columns_list">
+		id, website_name, website_domain, website_keywords, website_description, website_icp,
+		website_faxes, website_tel, website_hotline, website_address, website_protocol,
+		website_logo, website_config, init_date, init_addr
+	</sql>
+	
+	<!-- 关键字规则(EQ:等于、GT:大于、LT:小于、GE:大于等于、LE:小于等于) -->
+	<sql id="base_columns_where">
+		<if test="id != null">
+			and id = #{id}
+		</if>
+		<if test="name != null and name != ''">
+			and website_name like CONCAT('%',#{name},'%')
+		</if>
+		<if test="domain != null and domain != ''">
+			and website_domain like CONCAT('%',#{domain},'%')
+		</if>
+		<if test="keywords != null and keywords != ''">
+			and website_keywords like CONCAT('%',#{keywords},'%')
+		</if>
+		<if test="description != null and description != ''">
+			and website_description like CONCAT('%',#{description},'%')
+		</if>
+		<if test="icp != null and icp != ''">
+			and website_icp like CONCAT('%',#{icp},'%')
+		</if>
+		<if test="faxes != null and faxes != ''">
+			and website_faxes like CONCAT('%',#{faxes},'%')
+		</if>
+		<if test="tel != null and tel != ''">
+			and website_tel like CONCAT('%',#{tel},'%')
+		</if>
+		<if test="hotline != null and hotline != ''">
+			and website_hotline like CONCAT('%',#{hotline},'%')
+		</if>
+		<if test="address != null and address != ''">
+			and website_address like CONCAT('%',#{address},'%')
+		</if>
+		<if test="protocol != null and protocol != ''">
+			and website_protocol like CONCAT('%',#{protocol},'%')
+		</if>
+		<if test="config != null and config != ''">
+			and website_config like CONCAT('%',#{config},'%')
+		</if>
+		<if test="eq_idate != null and eq_idate != ''">
+			<![CDATA[and DATEDIFF(init_date, #{eq_idate}) = 0]]>
+		</if>
+		<if test="gt_idate != null and gt_idate != ''">
+			<![CDATA[and UNIX_TIMESTAMP(init_date) > UNIX_TIMESTAMP(#{gt_idate})]]>
+		</if>
+		<if test="lt_idate != null and lt_idate != ''">
+			<![CDATA[and UNIX_TIMESTAMP(init_date) > UNIX_TIMESTAMP(#{lt_idate})]]>
+		</if>
+		<if test="ge_idate != null and ge_idate != ''">
+			<![CDATA[and UNIX_TIMESTAMP(init_date) >= UNIX_TIMESTAMP(#{ge_idate})]]>
+		</if>
+		<if test="le_idate != null and le_idate != ''">
+			<![CDATA[and UNIX_TIMESTAMP(init_date) <= UNIX_TIMESTAMP(#{le_idate})]]>
+		</if>
+		<if test="iaddr != null and iaddr != ''">
+			and init_addr = #{iaddr}
+		</if>
+	</sql>
+	
+	<sql id="base_columns_order_by">
+		<trim suffixOverrides="," prefix="order by ">
+			<if test="order_id != null and order_id != ''">
+				<choose>
+					<when test="order_id == 'desc'">
+						id desc,
+					</when>
+					<otherwise>
+						id asc,
+					</otherwise>
+				</choose>
+			</if>
+		</trim>
+	</sql>
+	
+	<select id="get" parameterType="map" resultMap="base_result">
+		select
+			<include refid="base_columns_list" />
+		from
+			sys_website
+		<where>
+			<include refid="base_columns_where" />
+		</where>
+		<include refid="base_columns_order_by" />
+	</select>
+	
+	<select id="list" parameterType="map" resultMap="base_result">
+		select
+			<include refid="base_columns_list" />
+		from
+			sys_website
+		<where>
+			<include refid="base_columns_where" />
+		</where>
+		<include refid="base_columns_order_by" />
+	</select>
+	
+	<select id="page" parameterType="map" resultMap="base_result">
+		select
+			<include refid="base_columns_list" />
+		from
+			sys_website
+		<where>
+			<include refid="base_columns_where" />
+		</where>
+		<include refid="base_columns_order_by" />
+	</select>
+	
+	<insert id="save" keyColumn="id" keyProperty="id" parameterType="Website" useGeneratedKeys="true">
+		insert into sys_website
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="websiteName != null">
+				website_name,
+			</if>
+			<if test="websiteDomain != null">
+				website_domain,
+			</if>
+			<if test="websiteKeywords != null">
+				website_keywords,
+			</if>
+			<if test="websiteDescription != null">
+				website_description,
+			</if>
+			<if test="websiteIcp != null">
+				website_icp,
+			</if>
+			<if test="websiteFaxes != null">
+				website_faxes,
+			</if>
+			<if test="websiteTel != null">
+				website_tel,
+			</if>
+			<if test="websiteHotline != null">
+				website_hotline,
+			</if>
+			<if test="websiteAddress != null">
+				website_address,
+			</if>
+			<if test="websiteProtocol != null">
+				website_protocol,
+			</if>
+			<if test="websiteLogo != null">
+				website_logo,
+			</if>
+			<if test="initDate != null">
+				init_date,
+			</if>
+			<if test="initAddr != null">
+				init_addr,
+			</if>
+			<if test="websiteConfig != null">
+				website_config,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="websiteName != null">
+				#{websiteName,jdbcType=VARCHAR},
+			</if>
+			<if test="websiteDomain != null">
+				#{websiteDomain,jdbcType=VARCHAR},
+			</if>
+			<if test="websiteKeywords != null">
+				#{websiteKeywords,jdbcType=VARCHAR},
+			</if>
+			<if test="websiteDescription != null">
+				#{websiteDescription,jdbcType=VARCHAR},
+			</if>
+			<if test="websiteIcp != null">
+				#{websiteIcp,jdbcType=VARCHAR},
+			</if>
+			<if test="websiteFaxes != null">
+				#{websiteFaxes,jdbcType=VARCHAR},
+			</if>
+			<if test="websiteTel != null">
+				#{websiteTel,jdbcType=VARCHAR},
+			</if>
+			<if test="websiteHotline != null">
+				#{websiteHotline,jdbcType=VARCHAR},
+			</if>
+			<if test="websiteAddress != null">
+				#{websiteAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="websiteProtocol != null">
+				#{websiteProtocol,jdbcType=VARCHAR},
+			</if>
+			<if test="websiteLogo != null">
+				#{websiteLogo,jdbcType=VARCHAR},
+			</if>
+			<if test="initDate != null">
+				#{initDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="initAddr != null">
+				#{initAddr,jdbcType=VARCHAR},
+			</if>
+			<if test="websiteConfig != null">
+				#{websiteConfig,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	
+	<update id="update" parameterType="Website">
+		update sys_website
+		<set>
+			<if test="websiteName != null">
+				website_name = #{websiteName,jdbcType=VARCHAR},
+			</if>
+			<if test="websiteDomain != null">
+				website_domain = #{websiteDomain,jdbcType=VARCHAR},
+			</if>
+			<if test="websiteKeywords != null">
+				website_keywords = #{websiteKeywords,jdbcType=VARCHAR},
+			</if>
+			<if test="websiteDescription != null">
+				website_description = #{websiteDescription,jdbcType=VARCHAR},
+			</if>
+			<if test="websiteIcp != null">
+				website_icp = #{websiteIcp,jdbcType=VARCHAR},
+			</if>
+			<if test="websiteFaxes != null">
+				website_faxes = #{websiteFaxes,jdbcType=VARCHAR},
+			</if>
+			<if test="websiteTel != null">
+				website_tel = #{websiteTel,jdbcType=VARCHAR},
+			</if>
+			<if test="websiteHotline != null">
+				website_hotline = #{websiteHotline,jdbcType=VARCHAR},
+			</if>
+			<if test="websiteAddress != null">
+				website_address = #{websiteAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="websiteProtocol != null">
+				website_protocol = #{websiteProtocol,jdbcType=VARCHAR},
+			</if>
+			<if test="websiteLogo != null">
+				website_logo = #{websiteLogo,jdbcType=VARCHAR},
+			</if>
+			<if test="initDate != null">
+				init_date = #{initDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="initAddr != null">
+				init_addr = #{initAddr,jdbcType=VARCHAR},
+			</if>
+			<if test="websiteConfig != null">
+				website_config = #{websiteConfig,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>

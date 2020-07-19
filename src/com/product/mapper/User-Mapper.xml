@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.product.dao.UserDao">
+	<resultMap id="base_result" type="User">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="user_name" jdbcType="VARCHAR" property="userName" />
+		<result column="user_pwd" jdbcType="VARCHAR" property="userPwd" />
+        <result column="user_email" jdbcType="VARCHAR" property="userEmail" />
+		<result column="user_tel" jdbcType="VARCHAR" property="userTel" />		
+		<result column="user_company" jdbcType="VARCHAR" property="userCompany" />
+		<result column="user_addre" jdbcType="VARCHAR" property="userAddre" />		
+		<result column="user_headpic" jdbcType="VARCHAR" property="userHeadpic" />	
+		<result column="user_driverid" jdbcType="VARCHAR" property="userDriverid" />
+		<result column="user_complsort" jdbcType="VARCHAR" property="userComplsort" />
+		<result column="user_complsorts" jdbcType="VARCHAR" property="userComplsorts" />
+	    <result column="user_compldetails" jdbcType="VARCHAR" property="userCompldetails" />	
+		<result column="user_details" jdbcType="VARCHAR" property="userDetails" />	
+		<result column="user_admin" jdbcType="VARCHAR" property="userAdmin" />	
+		<result column="user_state" jdbcType="VARCHAR" property="userState" />	
+		<result column="user_isdisplay" jdbcType="VARCHAR" property="userIsdisplay" />	
+		<result column="login_date" jdbcType="TIMESTAMP" property="loginDate" />
+		<result column="login_addre" jdbcType="VARCHAR" property="loginAddre" />
+		<result column="init_date" jdbcType="TIMESTAMP" property="initDate" />
+		<result column="init_addr" jdbcType="VARCHAR" property="initAddr" />
+		<result column="user_openid" jdbcType="VARCHAR" property="userOpenid" />
+	</resultMap>
+	<sql id="base_columns_list">
+	    id, user_name, user_pwd, user_email, user_tel, user_company, user_addre,user_openid,
+	    user_headpic, user_driverid,user_complsort,user_complsorts, user_compldetails, user_details,
+		user_admin, user_state,user_isdisplay, login_date, login_addre, init_date, init_addr
+	</sql>
+	
+	<!-- 关键字规则(EQ:等于、GT:大于、LT:小于、GE:大于等于、LE:小于等于) -->
+	<sql id="base_columns_where">
+		<if test="id != null">
+			and id = #{id}
+		</if>
+		<if test="gt_id != null and gt_id != ''">
+			<![CDATA[and id > #{gt_id}]]>
+		</if>
+		<if test="lt_id != null and lt_id != ''">
+			<![CDATA[and id < #{lt_id}]]>
+		</if>
+		<if test="ge_id != null and ge_id != ''">
+			<![CDATA[and id >= #{ge_id}]]>
+		</if>
+		<if test="le_id != null and le_id != ''">
+			<![CDATA[and id <= #{lt_id}]]>
+		</if>
+		<if test="userName != null and userName != ''">
+			and user_name like CONCAT('%',#{userName},'%')
+		</if>
+		<if test="openid != null and openid != ''">
+			and user_openid = #{openid}
+		</if>
+		<if test="userPwd != null and userPwd != ''">
+			and user_pwd= #{userPwd}
+		</if>			
+		<if test="userTel != null and userTel != ''">
+			and user_tel like CONCAT('%',#{userTel},'%')
+		</if>			
+		<if test="userEmail != null and userEmail != ''">
+			and user_email like CONCAT('%',#{userEmail},'%')
+		</if>	
+		<if test="userCompany != null and userCompany != ''">
+			and user_company like CONCAT('%',#{userCompany},'%')
+		</if>
+		<if test="userAddre != null and userAddre != ''">
+			and user_addre = #{userAddre}
+		</if>
+		<if test="userHeadpic != null and userHeadpic != ''">
+			and user_headpic = #{userHeadpic}
+		</if>
+		<if test="userDriverid != null and userDriverid != ''">
+			and user_driverid = #{userDriverid}
+		</if>
+		<if test="userComplsort != null and userComplsort != ''">
+			and user_complsort like CONCAT('%',#{userComplsort},'%')
+		</if>	
+		<if test="userComplsorts != null and userComplsorts != ''">
+			and user_complsorts = #{userComplsorts}
+		</if>	
+		<if test="userCompldetails != null and userCompldetails != ''">
+			and user_compldetails = #{userCompldetails}
+		</if>	
+		<if test="userDetails != null and userDetails != ''">
+			and user_details = #{userDetails}
+		</if>	
+		<if test="userAdmin != null and userAdmin != ''">
+			and user_admin = #{userAdmin}
+		</if>		
+		<if test="userState != null and userState != ''">
+			and user_state = #{userState}
+		</if>
+		<if test="userIsdisplay != null and userIsdisplay != ''">
+			and user_isdisplay = #{userIsdisplay}
+		</if>
+		
+		<if test="loginDate != null and loginDate != ''">
+			and login_date = #{loginDate}
+		</if>
+		<if test="loginAddre != null and loginAddre != ''">
+			and login_addre = #{loginAddre}
+		</if>
+		<if test="eq_idate != null and eq_idate != ''">
+			<![CDATA[and DATEDIFF(init_date, #{eq_idate}) = 0]]>
+		</if>
+		<if test="gt_idate != null and gt_idate != ''">
+			<![CDATA[and UNIX_TIMESTAMP(init_date) > UNIX_TIMESTAMP(#{gt_idate})]]>
+		</if>
+		<if test="lt_idate != null and lt_idate != ''">
+			<![CDATA[and UNIX_TIMESTAMP(init_date) > UNIX_TIMESTAMP(#{lt_idate})]]>
+		</if>
+		<if test="ge_idate != null and ge_idate != ''">
+			<![CDATA[and UNIX_TIMESTAMP(init_date) >= UNIX_TIMESTAMP(#{ge_idate})]]>
+		</if>
+		<if test="le_idate != null and le_idate != ''">
+			<![CDATA[and UNIX_TIMESTAMP(init_date) <= UNIX_TIMESTAMP(#{le_idate})]]>
+		</if>
+		<if test="iaddr != null and iaddr != ''">
+			and init_addr = #{iaddr}
+		</if>
+		<if test="initAddr != null and initAddr != ''">
+			and init_addr = #{initAddr}
+		</if>
+
+	</sql>
+	
+	<sql id="base_columns_order_by">
+		<trim suffixOverrides="," prefix="order by ">
+			<if test="order_id != null and order_id != ''">
+				<choose>
+					<when test="order_id == 'desc'">
+						id desc,
+					</when>
+					<otherwise>
+						id asc,
+					</otherwise>
+				</choose>
+			</if>
+		</trim>
+	</sql>
+	
+	<select id="get" parameterType="map" resultMap="base_result">
+		select
+			<include refid="base_columns_list" />
+		from
+			an_user
+		<where>
+			<include refid="base_columns_where" />
+		</where>
+		<include refid="base_columns_order_by" />
+	</select>
+	
+	<select id="list" parameterType="map" resultMap="base_result">
+		select
+			<include refid="base_columns_list" />
+		from
+			an_user
+		<where>
+			<include refid="base_columns_where" />
+		</where>
+		<include refid="base_columns_order_by" />
+	</select>
+	
+	<select id="page" parameterType="map" resultMap="base_result">
+		select
+			<include refid="base_columns_list" />
+		from
+			an_user
+		<where>
+			<include refid="base_columns_where" />
+		</where>
+		<include refid="base_columns_order_by" />
+	</select>
+	
+	<insert id="save" keyColumn="id" keyProperty="id" parameterType="User" useGeneratedKeys="true">
+		insert into an_user
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="userName != null">
+				user_name,
+			</if>
+			<if test="userPwd != null">
+				user_pwd,
+			</if>
+			<if test="userEmail != null">
+				user_email,
+			</if>
+			<if test="userTel != null">
+				user_tel,
+			</if>
+			<if test="userCompany != null">
+				user_company,
+			</if>
+			<if test="userAddre != null">
+				user_addre,
+			</if>
+			<if test="userHeadpic != null">
+				user_headpic,
+			</if>
+			<if test="userOpenid != null">
+				user_openid,
+			</if>
+			<if test="userDriverid != null">
+				user_driverid,
+			</if>
+			<if test="userComplsort != null">
+				user_complsort,
+			</if>
+			<if test="userComplsorts != null">
+				user_complsorts,
+			</if>
+			<if test="userCompldetails != null">
+				user_compldetails,
+			</if>
+			<if test="userDetails != null">
+				user_details,
+			</if>
+			<if test="userAdmin != null">
+				user_admin,
+			</if>
+			<if test="userState != null">
+				user_state,
+			</if>		
+			<if test="userIsdisplay != null">
+				user_isdisplay,
+			</if>	
+			
+			<if test="loginDate != null">
+				login_date,
+			</if>
+			<if test="loginAddre != null">
+				login_addre,
+			</if>
+			<if test="initDate != null">
+				init_date,
+			</if>
+			<if test="initAddr != null">
+				init_addr,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="userOpenid != null">
+				#{userOpenid,jdbcType=VARCHAR},
+			</if>
+			<if test="userName != null">
+				#{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="userPwd != null">
+				#{userPwd,jdbcType=VARCHAR},
+			</if>
+			<if test="userEmail != null">
+				#{userEmail,jdbcType=VARCHAR},
+			</if>
+			<if test="userTel != null">
+				#{userTel,jdbcType=VARCHAR},
+			</if>
+			<if test="userCompany != null">
+				#{userCompany,jdbcType=VARCHAR},
+			</if>
+			<if test="userAddre != null">
+				#{userAddre,jdbcType=INTEGER},
+			</if>
+			<if test="userHeadpic != null">
+				#{userHeadpic,jdbcType=INTEGER},
+			</if>
+			
+			<if test="userDriverid != null">
+				#{userDriverid,jdbcType=VARCHAR},
+			</if>
+			<if test="userComplsort != null">
+				#{userComplsort,jdbcType=VARCHAR},
+			</if>
+			<if test="userComplsorts != null">
+				#{userComplsorts,jdbcType=VARCHAR},
+			</if>
+			<if test="userCompldetails != null">
+				#{userCompldetails,jdbcType=VARCHAR},
+			</if>
+			<if test="userDetails != null">
+				#{userDetails,jdbcType=VARCHAR},
+			</if>
+			<if test="userAdmin != null">
+				#{userAdmin,jdbcType=VARCHAR},
+			</if>
+			<if test="userState != null">
+				#{userState,jdbcType=INTEGER},
+			</if>			
+			<if test="userIsdisplay != null">
+				#{userIsdisplay,jdbcType=VARCHAR},
+			</if>			
+			<if test="loginDate != null">
+				#{loginDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="loginAddre != null">
+				#{loginAddre,jdbcType=VARCHAR},
+			</if>
+			<if test="initDate != null">
+				#{initDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="initAddr != null">
+				#{initAddr,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	
+	<update id="update" parameterType="User">
+		update an_user
+		<set>
+		    <if test="userOpenid != null">
+				user_openid = #{userOpenid,jdbcType=VARCHAR},
+			</if>
+			<if test="userName != null">
+				user_name = #{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="userPwd != null">
+				user_pwd = #{userPwd,jdbcType=VARCHAR},
+			</if>
+			<if test="userEmail != null">
+				user_email = #{userEmail,jdbcType=VARCHAR},
+			</if>
+			<if test="userTel != null">
+				user_tel = #{userTel,jdbcType=VARCHAR},
+			</if>
+			<if test="userCompany != null">
+				user_company = #{userCompany,jdbcType=VARCHAR},
+			</if>
+			<if test="userAddre != null">
+				user_addre = #{userAddre,jdbcType=INTEGER},
+			</if>
+			<if test="userHeadpic != null">
+				user_headpic = #{userHeadpic,jdbcType=INTEGER},
+			</if>
+			<if test="userDriverid != null">
+				user_driverid = #{userDriverid,jdbcType=INTEGER},
+			</if>
+			<if test="userComplsort != null">
+				user_complsort = #{userComplsort,jdbcType=VARCHAR},
+			</if>
+			<if test="userComplsorts != null">
+				user_complsorts = #{userComplsorts,jdbcType=VARCHAR},
+			</if>
+			<if test="userCompldetails != null">
+				user_compldetails = #{userCompldetails,jdbcType=VARCHAR},
+			</if>
+			<if test="userDetails != null">
+				user_details = #{userDetails,jdbcType=VARCHAR},
+			</if>
+			<if test="userAdmin != null">
+				user_admin = #{userAdmin,jdbcType=VARCHAR},
+			</if>
+			<if test="userState != null">
+				user_state = #{userState,jdbcType=INTEGER},
+			</if>		
+			
+			<if test="userIsdisplay != null">
+				user_isdisplay = #{userIsdisplay,jdbcType=VARCHAR},
+			</if>		
+			
+			<if test="loginDate != null">
+				login_date = #{loginDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="loginAddre != null">
+				login_addre = #{loginAddre,jdbcType=VARCHAR},
+			</if>
+			<if test="initDate != null">
+				init_date = #{initDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="initAddr != null">
+				init_addr = #{initAddr,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+</mapper>

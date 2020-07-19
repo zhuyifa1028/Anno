@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.product.dao.ProgramaDao">
+	<resultMap id="base_result" type="Programa">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="programa_title" jdbcType="VARCHAR" property="programaTitle" />
+		<result column="programa_url" jdbcType="VARCHAR" property="programaUrl" />
+		<result column="programa_type" jdbcType="VARCHAR" property="programaType" />
+		<result column="programa_brief" jdbcType="VARCHAR" property="programaBrief" />
+		<result column="programa_sequence" jdbcType="INTEGER" property="programaSequence" />
+		<result column="programa_language" jdbcType="VARCHAR" property="programaLanguage" />
+		<result column="programa_is_display" jdbcType="VARCHAR" property="programaIsDisplay" />
+		<result column="programa_parent_id" jdbcType="INTEGER" property="programaParentId" />
+		<result column="init_date" jdbcType="TIMESTAMP" property="initDate" />
+		<result column="init_addr" jdbcType="VARCHAR" property="initAddr" />
+		<result column="admin_administrate" jdbcType="LONGVARCHAR" property="adminAdministrate" />
+	</resultMap>
+	
+	<!-- 下级栏目集合 -->
+	<resultMap id="childs_programa_result" type="Programa" extends="base_result">
+		<association property="child" column="{parent_id=id, type=programa_type}" select="_childs" />
+	</resultMap>
+	
+	<!-- 下级栏目集合 -->
+	<resultMap id="child_programa_result" type="Programa" extends="base_result">
+		<association property="child" column="{parent_id=id, type=programa_type}" select="_child" />
+	</resultMap>
+	
+	<!-- 上级栏目集合 -->
+	<resultMap id="parents_programa_result" type="Programa" extends="base_result">
+		<collection property="parent" column="{id=programa_parent_id}" select="_parents" />
+	</resultMap>
+	
+	<!-- 上级栏目集合 -->
+	<resultMap id="parent_programa_result" type="Programa" extends="base_result">
+		<collection property="parent" column="{id=programa_parent_id}" select="_parent" />
+	</resultMap>
+	
+	<sql id="base_columns_list">
+		id, programa_title, programa_url, programa_type, programa_brief, programa_sequence,
+	    programa_language, programa_is_display,  programa_parent_id, 
+	    init_date, init_addr, admin_administrate
+	</sql>
+	
+	<!-- 关键字规则(EQ:等于、GT:大于、LT:小于、GE:大于等于、LE:小于等于) -->
+	<sql id="base_columns_where">
+		<if test="id != null">
+			and id = #{id}
+		</if>
+		<if test="in_ids != null and in_ids != ''">
+			and id in (${in_ids})
+		</if>
+		<if test="title != null and title != ''">
+			and programa_title like CONCAT('%',#{title},'%')
+		</if>
+		<if test="url != null and url != ''">
+			and programa_url = #{url}
+		</if>
+		<if test="type != null and type != ''">
+			and programa_type = #{type}
+		</if>
+		<if test="brief != null and brief != ''">
+			and programa_brief like CONCAT('%',#{brief},'%')
+		</if>
+		
+		<if test="eq_source != null and eq_source != ''">
+			and programa_source = #{eq_source}
+		</if>
+		<if test="gt_sequence != null and gt_sequence != ''">
+			<![CDATA[and programa_sequence > #{gt_sequence}]]>
+		</if>
+		<if test="lt_sequence != null and lt_sequence != ''">
+			<![CDATA[and programa_sequence < #{lt_sequence}]]>
+		</if>
+		<if test="ge_sequence != null and ge_sequence != ''">
+			<![CDATA[and programa_sequence >= #{ge_sequence}]]>
+		</if>
+		<if test="le_sequence != null and le_sequence != ''">
+			<![CDATA[and programa_sequence <= #{lt_sequence}]]>
+		</if>
+		<if test="language != null and language != ''">
+			and programa_language = #{language}
+		</if>
+		
+		<if test="is_display != null and is_display != ''">
+			and programa_is_display = #{is_display}
+		</if>
+		
+		<if test="parent_id != null">
+			and programa_parent_id = #{parent_id}
+		</if>
+		
+		<if test="eq_sdate != null and eq_sdate != ''">
+			<![CDATA[and DATEDIFF(programa_sdate, #{eq_sdate}) = 0]]>
+		</if>
+		<if test="gt_sdate != null and gt_sdate != ''">
+			<![CDATA[and UNIX_TIMESTAMP(programa_sdate) > UNIX_TIMESTAMP(#{gt_sdate})]]>
+		</if>
+		<if test="lt_sdate != null and lt_sdate != ''">
+			<![CDATA[and UNIX_TIMESTAMP(programa_sdate) > UNIX_TIMESTAMP(#{lt_sdate})]]>
+		</if>
+		<if test="ge_sdate != null and ge_sdate != ''">
+			<![CDATA[and UNIX_TIMESTAMP(programa_sdate) >= UNIX_TIMESTAMP(#{ge_sdate})]]>
+		</if>
+		<if test="le_sdate != null and le_sdate != ''">
+			<![CDATA[and UNIX_TIMESTAMP(programa_sdate) <= UNIX_TIMESTAMP(#{le_sdate})]]>
+		</if>
+		<if test="eq_edate != null and eq_edate != ''">
+			<![CDATA[and DATEDIFF(programa_edate, #{eq_edate}) = 0]]>
+		</if>
+		<if test="gt_edate != null and gt_edate != ''">
+			<![CDATA[and UNIX_TIMESTAMP(programa_edate) > UNIX_TIMESTAMP(#{gt_edate})]]>
+		</if>
+		<if test="lt_edate != null and lt_edate != ''">
+			<![CDATA[and UNIX_TIMESTAMP(programa_edate) > UNIX_TIMESTAMP(#{lt_edate})]]>
+		</if>
+		<if test="ge_edate != null and ge_edate != ''">
+			<![CDATA[and UNIX_TIMESTAMP(programa_edate) >= UNIX_TIMESTAMP(#{ge_edate})]]>
+		</if>
+		<if test="le_edate != null and le_edate != ''">
+			<![CDATA[and UNIX_TIMESTAMP(programa_edate) <= UNIX_TIMESTAMP(#{le_edate})]]>
+		</if>
+		<if test="eq_idate != null and eq_idate != ''">
+			<![CDATA[and DATEDIFF(init_date, #{eq_idate}) = 0]]>
+		</if>
+		<if test="gt_idate != null and gt_idate != ''">
+			<![CDATA[and UNIX_TIMESTAMP(init_date) > UNIX_TIMESTAMP(#{gt_idate})]]>
+		</if>
+		<if test="lt_idate != null and lt_idate != ''">
+			<![CDATA[and UNIX_TIMESTAMP(init_date) > UNIX_TIMESTAMP(#{lt_idate})]]>
+		</if>
+		<if test="ge_idate != null and ge_idate != ''">
+			<![CDATA[and UNIX_TIMESTAMP(init_date) >= UNIX_TIMESTAMP(#{ge_idate})]]>
+		</if>
+		<if test="le_idate != null and le_idate != ''">
+			<![CDATA[and UNIX_TIMESTAMP(init_date) <= UNIX_TIMESTAMP(#{le_idate})]]>
+		</if>
+		<if test="iaddr != null and iaddr != ''">
+			and init_addr = #{iaddr}
+		</if>
+	</sql>
+	
+	<sql id="base_columns_order_by">
+		<trim suffixOverrides="," prefix="order by ">
+			<if test="order_parent_id != null and order_parent_id != ''">
+				<choose>
+					<when test="order_parent_id == 'desc'">
+						programa_parent_id desc,
+					</when>
+					<otherwise>
+						programa_parent_id asc,
+					</otherwise>
+				</choose>
+			</if>
+			<if test="order_sequence != null and order_sequence != ''">
+				<choose>
+					<when test="order_sequence == 'desc'">
+						programa_sequence desc,
+					</when>
+					<otherwise>
+						programa_sequence asc,
+					</otherwise>
+				</choose>
+			</if>
+			<if test="order_id != null and order_id != ''">
+				<choose>
+					<when test="order_id == 'desc'">
+						id desc,
+					</when>
+					<otherwise>
+						id asc,
+					</otherwise>
+				</choose>
+			</if>
+		</trim>
+	</sql>
+	
+	<!-- 获取下级栏目(内部执行方法) -->
+	<select id="_childs" parameterType="map" resultMap="childs_programa_result">
+		select
+			<include refid="base_columns_list" />
+		from
+			an_programa
+		<where>
+			<include refid="base_columns_where" />
+		</where>
+		order by
+			programa_parent_id, programa_sequence
+	</select>
+	
+	<!-- 获取下级栏目(内部执行方法) -->
+	<select id="_child" parameterType="map" resultMap="base_result">
+		select
+			<include refid="base_columns_list" />
+		from
+			an_programa
+		<where>
+			<include refid="base_columns_where" />
+		</where>
+		order by
+			programa_parent_id, programa_sequence
+	</select>
+	
+	<!-- 获取下级栏目 -->
+	<select id="childs" parameterType="map" resultMap="childs_programa_result">
+		select
+			<include refid="base_columns_list" />
+		from
+			an_programa
+		<where>
+			<include refid="base_columns_where" />
+		</where>
+		<include refid="base_columns_order_by" />
+	</select>
+	
+	<!-- 获取下级栏目 -->
+	<select id="child" parameterType="map" resultMap="child_programa_result">
+		select
+			<include refid="base_columns_list" />
+		from
+			an_programa
+		<where>
+			<include refid="base_columns_where" />
+		</where>
+		<include refid="base_columns_order_by" />
+	</select>
+	
+	<!-- 获取上级栏目(内部执行方法) -->
+	<select id="_parents" parameterType="map" resultMap="parents_programa_result">
+		select
+			<include refid="base_columns_list" />
+		from
+			an_programa
+		<where>
+			<include refid="base_columns_where" />
+		</where>
+	</select>
+	
+	<!-- 获取上级栏目(内部执行方法) -->
+	<select id="_parent" parameterType="map" resultMap="base_result">
+		select
+			<include refid="base_columns_list" />
+		from
+			an_programa
+		<where>
+			<include refid="base_columns_where" />
+		</where>
+	</select>
+	
+	<!-- 获取下级栏目 -->
+	<select id="parents" parameterType="map" resultMap="parents_programa_result">
+		select
+			<include refid="base_columns_list" />
+		from
+			an_programa
+		<where>
+			<include refid="base_columns_where" />
+		</where>
+		<include refid="base_columns_order_by" />
+	</select>
+	
+	<!-- 获取下级栏目 -->
+	<select id="parent" parameterType="map" resultMap="parent_programa_result">
+		select
+			<include refid="base_columns_list" />
+		from
+			an_programa
+		<where>
+			<include refid="base_columns_where" />
+		</where>
+		<include refid="base_columns_order_by" />
+	</select>
+	
+	<select id="get" parameterType="map" resultMap="base_result">
+		select
+			<include refid="base_columns_list" />
+		from
+			an_programa
+		<where>
+			<include refid="base_columns_where" />
+		</where>
+		<include refid="base_columns_order_by" />
+	</select>
+	
+	<select id="list" parameterType="map" resultMap="base_result">
+		select
+			<include refid="base_columns_list" />
+		from
+			an_programa
+		<where>
+			<include refid="base_columns_where" />
+		</where>
+		<include refid="base_columns_order_by" />
+	</select>
+	
+	<select id="page" parameterType="map" resultMap="base_result">
+		select
+			<include refid="base_columns_list" />
+		from
+			an_programa
+		<where>
+			<include refid="base_columns_where" />
+		</where>
+		<include refid="base_columns_order_by" />
+	</select>
+	
+	<insert id="save" keyColumn="id" keyProperty="id" parameterType="Programa" useGeneratedKeys="true">
+		insert into an_programa
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="programaTitle != null">
+				programa_title,
+			</if>
+			<if test="programaUrl != null">
+				programa_url,
+			</if>
+			<if test="programaType != null">
+				programa_type,
+			</if>
+			<if test="programaBrief != null">
+				programa_brief,
+			</if>
+			<if test="programaSequence != null">
+				programa_sequence,
+			</if>
+			<if test="programaLanguage != null">
+				programa_language,
+			</if>
+			<if test="programaIsDisplay != null">
+				programa_is_display,
+			</if>
+			<if test="programaParentId != null">
+				programa_parent_id,
+			</if>
+			<if test="initDate != null">
+				init_date,
+			</if>
+			<if test="initAddr != null">
+				init_addr,
+			</if>
+			<if test="adminAdministrate != null">
+				admin_administrate,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="programaTitle != null">
+				#{programaTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="programaUrl != null">
+				#{programaUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="programaType != null">
+				#{programaType,jdbcType=VARCHAR},
+			</if>
+			<if test="programaBrief != null">
+				#{programaBrief,jdbcType=VARCHAR},
+			</if>
+			<if test="programaSequence != null">
+				#{programaSequence,jdbcType=INTEGER},
+			</if>
+			<if test="programaLanguage != null">
+				#{programaLanguage,jdbcType=VARCHAR},
+			</if>
+			<if test="programaIsDisplay != null">
+				#{programaIsDisplay,jdbcType=VARCHAR},
+			</if>
+			<if test="programaParentId != null">
+				#{programaParentId,jdbcType=INTEGER},
+			</if>
+			<if test="initDate != null">
+				#{initDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="initAddr != null">
+				#{initAddr,jdbcType=VARCHAR},
+			</if>
+			<if test="adminAdministrate != null">
+				#{adminAdministrate,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	
+	<update id="update" parameterType="Programa">
+		update an_programa
+		<set>
+			<if test="programaTitle != null">
+				programa_title = #{programaTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="programaUrl != null">
+				programa_url = #{programaUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="programaType != null">
+				programa_type = #{programaType,jdbcType=VARCHAR},
+			</if>
+			<if test="programaBrief != null">
+				programa_brief = #{programaBrief,jdbcType=VARCHAR},
+			</if>
+			<if test="programaSequence != null">
+				programa_sequence = #{programaSequence,jdbcType=INTEGER},
+			</if>
+			<if test="programaLanguage != null">
+				programa_language = #{programaLanguage,jdbcType=VARCHAR},
+			</if>
+			<if test="programaIsDisplay != null">
+				programa_is_display = #{programaIsDisplay,jdbcType=VARCHAR},
+			</if>
+			<if test="programaParentId != null">
+				programa_parent_id = #{programaParentId,jdbcType=INTEGER},
+			</if>
+			<if test="initDate != null">
+				init_date = #{initDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="initAddr != null">
+				init_addr = #{initAddr,jdbcType=VARCHAR},
+			</if>
+			<if test="adminAdministrate != null">
+				admin_administrate = #{adminAdministrate,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>

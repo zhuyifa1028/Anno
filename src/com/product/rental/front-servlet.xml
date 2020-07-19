@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+	http://www.springframework.org/schema/tx
+	http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-4.3.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+	http://www.springframework.org/schema/mvc
+	http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd">
+	
+	<!-- 扫描注解文件 -->
+	<context:component-scan base-package="com.product.rental.front.controller">
+		<context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.RestController"/>
+	</context:component-scan>
+	
+	<!-- 对模型视图名称的解析 -->
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/rental/front/" />
+		<property name="suffix" value=".jsp" />
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+	</bean>
+	
+	<!-- 配置默认请求映射 -->
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" />
+	
+	<!-- 配置拦截器 -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<bean class="com.github.miemiedev.mybatis.paginator.springmvc.PageListAttrHandlerInterceptor" />
+		</mvc:interceptor>
+		
+		<!-- 国际化拦截器 -->
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+				<property name="paramName" value="locale" />
+			</bean>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<mvc:exclude-mapping path="/login"/>
+			<mvc:exclude-mapping path="/login.*"/>
+			<mvc:exclude-mapping path="/zh/*"/>
+			<mvc:exclude-mapping path="/en/*"/>
+			<mvc:exclude-mapping path="/forget.*"/>
+			<mvc:exclude-mapping path="/shareurl.html"/>
+			<mvc:exclude-mapping path="/share"/>
+			<mvc:exclude-mapping path="/logout.html"/>
+			<mvc:exclude-mapping path="/openid.html"/>
+			<mvc:exclude-mapping path="/wxapi.html"/>
+			<bean class="com.product.interceptor.WxDriverContextInterceptor">
+				<property name="url" value="/openid.html" />
+			</bean>
+		</mvc:interceptor> 
+		<mvc:interceptor>
+			<mvc:mapping path="/zh/**"/>
+			<mvc:exclude-mapping path="/zh/userlogin"/>
+			<mvc:exclude-mapping path="/zh/login.*"/>
+			<mvc:exclude-mapping path="/zh/forget.*"/>
+			<mvc:exclude-mapping path="/zh/logout.*"/>
+			<mvc:exclude-mapping path="/zh/openid.html"/>
+			<mvc:exclude-mapping path="/zh/wxapi.html"/>
+			<bean class="com.product.interceptor.WxContextInterceptor">
+				<property name="url" value="/zh/openid.html" />
+			</bean>
+		</mvc:interceptor> 
+		
+		
+
+		<mvc:interceptor>
+			<mvc:mapping path="/en/**"/>
+			<mvc:exclude-mapping path="/en/userlogin"/>
+			<mvc:exclude-mapping path="/en/login.*"/>
+			<mvc:exclude-mapping path="/en/forget.*"/>
+			<mvc:exclude-mapping path="/en/openid.html"/>
+			<mvc:exclude-mapping path="/en/wxapi.html"/>
+			<bean class="com.product.interceptor.WxContextInterceptor">
+				<property name="url" value="/zh/openid.html" />
+			</bean>
+		</mvc:interceptor> 
+		
+		
+		
+		
+		
+		 <!-- 司机登录拦截 -->
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<mvc:exclude-mapping path="/login"/>
+			<mvc:exclude-mapping path="/login.*"/>
+			<mvc:exclude-mapping path="/zh/*"/>
+			<mvc:exclude-mapping path="/en/*"/>
+			<mvc:exclude-mapping path="/forget.*"/>
+			<mvc:exclude-mapping path="/shareurl.html"/>
+			<mvc:exclude-mapping path="/openid.html"/>
+			<bean class="com.product.interceptor.WebDriverContextInterceptor">
+				<property name="url" value="/login.html" />
+			</bean>
+		</mvc:interceptor>
+		
+        <!-- 中文用户登录拦截 -->
+		<mvc:interceptor>
+			<mvc:mapping path="/zh/**"/>
+			<mvc:exclude-mapping path="/zh/userlogin"/>
+			<mvc:exclude-mapping path="/zh/login.*"/>
+			<mvc:exclude-mapping path="/zh/forget.*"/>
+			<mvc:exclude-mapping path="/zh/logout.*"/>
+			<mvc:exclude-mapping path="/zh/openid.html"/>
+			<bean class="com.product.interceptor.WebContextInterceptor">
+				<property name="url" value="/zh/login.html" />
+			</bean>
+		</mvc:interceptor>
+		
+		 <!-- 英文用户登录拦截 -->
+		<mvc:interceptor>
+			<mvc:mapping path="/en/**"/>
+			<mvc:exclude-mapping path="/en/userlogin"/>
+			<mvc:exclude-mapping path="/en/login.*"/>
+			<mvc:exclude-mapping path="/en/forget.*"/>
+			<mvc:exclude-mapping path="/en/openid.html"/>
+			<bean class="com.product.interceptor.WebContextInterceptor">
+				<property name="url" value="/en/login.html" />
+			</bean>
+		</mvc:interceptor>		
+		<!-- 手机设备拦截 -->
+		<!-- <mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<bean class="com.product.interceptor.MobileDevicesContextInterceptor">
+				<property name="url" value="/web/index.html" />
+			</bean>
+		</mvc:interceptor> -->
+		
+		<!-- 国际信息拦截器 -->
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<mvc:exclude-mapping path="/top/**"/>
+			<mvc:exclude-mapping path="/foot.html"/>
+			<bean class="com.product.interceptor.LocaleContextInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors>
+	
+	<!-- 启动切面支持 -->
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+	
+	<!-- 国际化资源配置 -->
+	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<!-- 配置资源路径 -->
+		<property name="basename" value="classpath:com/product/message/message" />
+		<!-- 默认资源名称 -->
+		<property name="useCodeAsDefaultMessage" value="true" />
+		<!-- 默认资源编码 -->
+        <property name="defaultEncoding" value="UTF-8" />
+	</bean>
+	
+	<!-- 国际化解析器 -->
+	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver" />
+</beans>
