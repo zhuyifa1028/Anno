@@ -11,6 +11,6 @@ import org.springframework.data.repository.NoRepositoryBean;
  * @version 2020-11-14
  */
 @NoRepositoryBean
-public interface BaseRepository extends JpaRepository<Base, Long> {
+public interface BaseRepository<T extends Base> extends JpaRepository<T, Long> {
 
 }
