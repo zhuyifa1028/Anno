@@ -20,7 +20,7 @@ public class DriverController extends BaseController<Driver> {
     private final DriverService driverService;
 
     @Override
-    BaseService<Driver> getService() {
+    public BaseService<Driver> getService() {
         return driverService;
     }
 

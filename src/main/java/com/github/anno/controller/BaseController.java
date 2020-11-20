@@ -16,6 +16,6 @@ public abstract class BaseController<T extends Base> {
      *
      * @return 服务接口
      */
-    abstract BaseService<T> getService();
+    public abstract BaseService<T> getService();
 
 }

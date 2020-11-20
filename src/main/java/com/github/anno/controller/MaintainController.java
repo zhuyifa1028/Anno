@@ -20,7 +20,7 @@ public class MaintainController extends BaseController<Maintain> {
     private final MaintainService maintainService;
 
     @Override
-    BaseService<Maintain> getService() {
+    public BaseService<Maintain> getService() {
         return maintainService;
     }
 

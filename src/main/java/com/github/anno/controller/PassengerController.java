@@ -20,7 +20,7 @@ public class PassengerController extends BaseController<Passenger> {
     private final PassengerService passengerService;
 
     @Override
-    BaseService<Passenger> getService() {
+    public BaseService<Passenger> getService() {
         return passengerService;
     }
 
