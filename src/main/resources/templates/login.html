@@ -2,9 +2,51 @@
 <html lang="zh-cmn-Hans">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
         <title>司机登录 - 安诺久通汽车租赁</title>
-    </head>
-    <body>
+        <link rel="stylesheet" href="./style/weui.css">
+        <link rel="stylesheet" href="./style/weui_ext.css">
+        <style>
+            /*noinspection CssOverwrittenProperties*/
+            .weui-navbar__item {
+                padding: 10px 0;
+                /*noinspection CssInvalidFunction*/
+                padding-top: calc(10px + constant(safe-area-inset-top));
+                /*noinspection CssInvalidFunction*/
+                padding-top: calc(10px + env(safe-area-inset-top));
+            }
 
+            .weui-navbar__item.weui-bar__item_on {
+                background-color: #2cad6e;
+            }
+        </style>
+    </head>
+    <body ontouchstart>
+        <div class="weui-toptips weui-toptips_warn js_tooltips">错误提示</div>
+        <div class="container" id="container">
+            <div class="page navbar js_show">
+                <div class="page__hd" style="padding: 0;">
+                    <div class="weui-tab">
+                        <div class="weui-navbar">
+                            <div class="weui-navbar__item weui-bar__item_on">司机登录</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="page__bd">
+
+                </div>
+                <div class="page__ft j_bottom" style="display: block;">
+                    <div class="weui-footer">
+                        <p class="weui-footer__links">
+                            <a href="javascript:" class="weui-footer__link">沪ICP备17040677号</a>
+                        </p>
+                        <p class="weui-footer__text">上海市吴中东路555号天源大厦7楼 021-33385558</p>
+                        <p class="weui-footer__links">
+                            <a href="javascript:" class="weui-footer__link">沪公网安备 31010402003593号</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
 </html>
