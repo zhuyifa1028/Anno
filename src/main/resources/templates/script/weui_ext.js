@@ -2,7 +2,7 @@
  * Created by jf on 2015/9/11.
  * Modified by bear on 2016/9/7.
  */
-const footerTmpl = $('#footerTmpl').html();
+var footerTmpl = $('#footerTmpl').html();
 $(function () {
     var pageManager = {
         $container: $('#container'),
@@ -136,7 +136,9 @@ $(function () {
         _bind: function (page) {
             var events = page.events || {};
             for (var t in events) {
+                // noinspection JSUnfilteredForInLoop
                 for (var type in events[t]) {
+                    // noinspection JSUnfilteredForInLoop
                     this.$container.on(type, t, events[t][type]);
                 }
             }
@@ -195,7 +197,7 @@ $(function () {
         //    Android 手机下, input 或 textarea 元素聚焦时, 主动滚一把
         if (/Android/gi.test(navigator.userAgent)) {
             window.addEventListener('resize', function () {
-                if (document.activeElement.tagName == 'INPUT' || document.activeElement.tagName == 'TEXTAREA') {
+                if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') {
                     window.setTimeout(function () {
                         document.activeElement.scrollIntoViewIfNeeded();
                     }, 0);
@@ -269,7 +271,7 @@ $(function () {
         pageManager
             .setPageAppend(function($html){
                 $html.eq(0).append(footerTmpl);
-                setTimeout(() => {
+                setTimeout(function () {
                     var $foot = $html.find('.page__ft');
                     if($foot.length < 1) return;
 
