@@ -19,6 +19,11 @@
             .weui-navbar__item.weui-bar__item_on {
                 background-color: #2cad6e;
             }
+
+            .page__ft.j_bottom {
+                display: block !important;
+                background-color: var(--weui-BG-2);
+            }
         </style>
     </head>
     <body ontouchstart>
@@ -33,15 +38,61 @@
                     </div>
                 </div>
                 <div class="page__bd">
-
+                    <div class="weui-form">
+                        <div class="weui-form__text-area">
+                            <img src="images/log_icon.png" alt="" style="width: 120px;">
+                        </div>
+                        <div class="weui-form__control-area">
+                            <div class="weui-cells__group weui-cells__group_form">
+                                <div class="weui-cells weui-cells_form">
+                                    <div class="weui-cell weui-cell_active">
+                                        <div class="weui-cell__hd">
+                                            <label class="weui-label">手机号</label>
+                                        </div>
+                                        <div class="weui-cell__bd">
+                                            <input class="weui-input" type="number" pattern="[0-9]*" placeholder="请输入手机号" value="12345678907">
+                                        </div>
+                                        <div class="weui-cell__ft">
+                                            <a class="weui-btn_reset weui-btn_icon">
+                                                <i id="showIOSDialog1" class="weui-icon-info-circle"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="weui-cell weui-cell_active weui-cell_vcode">
+                                        <div class="weui-cell__hd">
+                                            <label class="weui-label">验证码</label>
+                                        </div>
+                                        <div class="weui-cell__bd">
+                                            <input autofocus="" class="weui-input" type="text" pattern="[0-9]*" id="js_input" placeholder="输入验证码" maxlength="6">
+                                        </div>
+                                        <div class="weui-cell__ft">
+                                            <button class="weui-btn weui-btn_default weui-vcode-btn">获取验证码</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="weui-cells__tips"><a class="weui-link" href="javascript:">收不到验证码</a></div>
+                            </div>
+                        </div>
+                        <div class="weui-form__tips-area">
+                            <label id="weuiAgree" for="weuiAgreeCheckbox" class="weui-agree">
+                                <input id="weuiAgreeCheckbox" type="checkbox" class="weui-agree__checkbox"><span class="weui-agree__text">阅读并同意<a href="javascript:">《相关条款》</a>
+        </span>
+                            </label>
+                        </div>
+                        <div class="weui-form__opr-area">
+                            <a class="weui-btn weui-btn_primary weui-btn_disabled" href="javascript:" id="showTooltips">确定</a>
+                        </div>
+                    </div>
                 </div>
-                <div class="page__ft j_bottom" style="display: block;">
+                <div class="page__ft j_bottom">
                     <div class="weui-footer">
                         <p class="weui-footer__links">
+                            <img src="images/gov_icon.png" alt="">
                             <a href="javascript:" class="weui-footer__link">沪ICP备17040677号</a>
                         </p>
                         <p class="weui-footer__text">上海市吴中东路555号天源大厦7楼 021-33385558</p>
                         <p class="weui-footer__links">
+                            <img src="images/gov_icon.png" alt="">
                             <a href="javascript:" class="weui-footer__link">沪公网安备 31010402003593号</a>
                         </p>
                     </div>
