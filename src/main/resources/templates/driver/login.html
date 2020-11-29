@@ -5,8 +5,8 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
         <title>司机登录 - 安诺久通汽车租赁</title>
-        <link rel="stylesheet" href="../../static/plugins/weui/weui.css">
-        <link rel="stylesheet" href="../../static/plugins/weui/weui_ext.css">
+        <link rel="stylesheet" href="./plugins/weui/weui.css">
+        <link rel="stylesheet" href="./plugins/weui/weui_ext.css">
         <style>
             /*noinspection CssOverwrittenProperties*/
             .weui-navbar__item {
@@ -41,33 +41,31 @@
                 <div class="page__bd">
                     <div class="weui-form">
                         <div class="weui-form__text-area">
-                            <img src="../../static/images/driver/login/icon_company.png" alt="" style="width: 120px;">
+                            <img src="./images/driver/login/icon_company.png" alt="" style="width: 120px;">
                         </div>
                         <div class="weui-form__control-area">
                             <div class="weui-cells__group weui-cells__group_form">
                                 <div class="weui-cells weui-cells_form">
                                     <div class="weui-cell weui-cell_active">
                                         <div class="weui-cell__hd">
-                                            <label class="weui-label">手机号</label>
+                                            <img src="./images/driver/login/icon_mobile.png" alt="" style="height: 25px;">
                                         </div>
                                         <div class="weui-cell__bd">
-                                            <input class="weui-input" type="number" pattern="[0-9]*" placeholder="请输入手机号" value="12345678907">
+                                            <input class="weui-input" type="number" pattern="[0-9]*" placeholder="请输入您的手机号码">
                                         </div>
                                         <div class="weui-cell__ft">
-                                            <a class="weui-btn_reset weui-btn_icon">
-                                                <i id="showIOSDialog1" class="weui-icon-info-circle"></i>
-                                            </a>
+                                            <img src="./images/driver/login/icon_clear.png" alt="" style="width: 15px;">
                                         </div>
                                     </div>
-                                    <div class="weui-cell weui-cell_active weui-cell_vcode">
+                                    <div class="weui-cell weui-cell_active" style="padding-left: 28px;">
                                         <div class="weui-cell__hd">
-                                            <label class="weui-label">验证码</label>
+                                            <img src="./images/driver/login/icon_password.png" alt="" style="height: 25px;">
                                         </div>
                                         <div class="weui-cell__bd">
-                                            <input autofocus="" class="weui-input" type="text" pattern="[0-9]*" id="js_input" placeholder="输入验证码" maxlength="6">
+                                            <input class="weui-input" type="password" id="js_input" placeholder="请输入您的登录密码">
                                         </div>
                                         <div class="weui-cell__ft">
-                                            <button class="weui-btn weui-btn_default weui-vcode-btn">获取验证码</button>
+                                            <img src="./images/driver/login/icon_pass_hide.png" alt="" style="width: 15px;">
                                         </div>
                                     </div>
                                 </div>
@@ -88,12 +86,12 @@
                 <div class="page__ft j_bottom">
                     <div class="weui-footer">
                         <p class="weui-footer__links">
-                            <img src="../../static/images/driver/login/icon_beian.png" alt="">
+                            <img src="./images/driver/login/icon_beian.png" alt="">
                             <a href="javascript:" class="weui-footer__link">沪ICP备17040677号</a>
                         </p>
                         <p class="weui-footer__text">上海市吴中东路555号天源大厦7楼 021-33385558</p>
                         <p class="weui-footer__links">
-                            <img src="../../static/images/driver/login/icon_beian.png" alt="">
+                            <img src="./images/driver/login/icon_beian.png" alt="">
                             <a href="javascript:" class="weui-footer__link">沪公网安备 31010402003593号</a>
                         </p>
                     </div>
