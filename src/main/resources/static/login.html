@@ -1,100 +1,118 @@
-<!DOCTYPE html>
-<!--suppress HtmlFormInputWithoutLabel -->
-<html lang="zh-cmn-Hans">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="zh-CN">
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
-        <title>司机登录 - 安诺久通汽车租赁</title>
-        <link rel="stylesheet" href="./plugins/weui/weui.css">
-        <link rel="stylesheet" href="./plugins/weui/weui_ext.css">
-        <style>
-            /*noinspection CssOverwrittenProperties*/
-            .weui-navbar__item {
-                padding: 10px 0;
-                /*noinspection CssInvalidFunction*/
-                padding-top: calc(10px + constant(safe-area-inset-top));
-                /*noinspection CssInvalidFunction*/
-                padding-top: calc(10px + env(safe-area-inset-top));
-            }
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta http-equiv="Expires" content="-1">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Cache-Control" content="no-cache">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-            .weui-navbar__item.weui-bar__item_on {
-                background-color: #2cad6e;
-            }
+        <meta name="format-detection" content="telephone=no">
+        <meta name="renderer" content="webkit">
+        <meta name="keywords" content="安诺租车">
+        <meta name="description" content="安诺租车">
 
-            .page__ft.j_bottom {
-                display: block !important;
-                background-color: var(--weui-BG-2);
-            }
-        </style>
+        <script type="text/javascript">
+            <!--
+            var _files = '/admin/resources/main/admin';
+            var _admin = '/admin';
+            //-->
+        </script>
+
+        <link rel="icon" href="/index.ico" type="image/x-icon"/>
+        <link rel="shortcut icon" href="/index.ico" type="image/x-icon"/>
+        <link rel="bookmark" href="/index.ico" type="image/x-icon"/>
+        <link rel="apple-touch-icon-precomposed" href="/index.ico"/>
+
+        <link rel="stylesheet" type="text/css" href="plugins/bootstrap/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="plugins/animate/animate.css">
+        <link rel="stylesheet" type="text/css" href="plugins/admin/style.css"/>
+
+        <link rel="stylesheet" type="text/css" href="plugins/font-awesome/font-awesome.css"/>
+        <link rel="stylesheet" type="text/css" href="plugins/toastr/toastr.min.css"/>
+
+        <script type="text/javascript" src="plugins/jquery/jquery-2.1.1.js"></script>
+        <script type="text/javascript" src="plugins/bootstrap/bootstrap.min.js"></script>
+        <script type="text/javascript" src="plugins/metisMenu/jquery.metisMenu.js"></script>
+        <script type="text/javascript" src="/admin/resources/main/admin/js/slimscroll/jquery.slimscroll.min.js"></script>
+        <script type="text/javascript" src="/admin/resources/main/admin/js/pace/pace.min.js"></script>
+        <script type="text/javascript" src="/admin/resources/main/admin/js/jquery-ui/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="/admin/resources/main/admin/js/toastr/toastr.min.js"></script>
+
+        <script type="text/javascript" src="/admin/resources/main/admin/js/des/tripledes.js"></script>
+        <script type="text/javascript" src="/admin/resources/main/admin/js/des/mode-ecb.js"></script>
+        <script type="text/javascript" src="/admin/resources/main/admin/js/inspinia.js"></script>
+        <script type="text/javascript" src="/admin/resources/main/admin/js/jquery/validate/jquery.metadata.js"></script>
+        <script type="text/javascript" src="/admin/resources/main/admin/js/jquery/validate/jquery.validate.js"></script>
+        <script type="text/javascript" src="/admin/resources/main/admin/js/jquery/validate/validate.method.js"></script>
+        <script type="text/javascript" src="/admin/resources/main/admin/js/jquery/form/jquery.form.js"></script>
+
+        <title>安诺租车-登录</title>
+        <script type="text/javascript">
+            $(function () {
+                var publickey = 'framework_public_session';
+                if (!!publickey) {
+                    $('form.form').validate({
+                        submitHandler: function (form) {
+                            var _form = $(form);
+                            var _tel = _form.find('input[name="tel"]').val() || '';
+                            var _pwd = _form.find('input[name="pwd"]').val();
+                            _pwd = encrypt(_pwd, publickey) || '';
+                            if (!!_pwd && _tel) {
+                                $.post('/admin/rental/login', {tel: _tel, pwd: _pwd}, function (data) {
+                                    if (data.succeed == true) {
+                                        window.location.href = '/admin/rental/index.html';
+                                    } else {
+                                        error(data.message);
+                                    }
+                                });
+                            } else {
+                                error('密码加密失败');
+                            }
+                            return false;
+                        }
+                    });
+                } else {
+                    error('加载密钥失败');
+                }
+            });
+        </script>
     </head>
-    <body ontouchstart>
-        <div class="weui-toptips weui-toptips_warn js_tooltips">错误提示</div>
-        <div class="container" id="container">
-            <div class="page navbar js_show">
-                <div class="page__hd" style="padding: 0;">
-                    <div class="weui-tab">
-                        <div class="weui-navbar">
-                            <div class="weui-navbar__item weui-bar__item_on">司机登录</div>
-                        </div>
+    <body class="gray-bg">
+        <div class="loginColumns animated fadeInDown">
+            <form class="form" method="post" novalidate="novalidate">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h2 class="font-bold">Welcome to 安诺租车</h2>
+                        <p>Perfectly designed and precisely prepared admin theme with over 50 pages with extra new web app views.</p>
+                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+                        <p>When an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+                        <p>
+                            <small>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</small>
+                        </p>
                     </div>
-                </div>
-                <div class="page__bd">
-                    <div class="weui-form">
-                        <div class="weui-form__text-area">
-                            <img src="./images/driver/login/icon_company.png" alt="" style="width: 120px;">
-                        </div>
-                        <div class="weui-form__control-area">
-                            <div class="weui-cells__group weui-cells__group_form">
-                                <div class="weui-cells weui-cells_form">
-                                    <div class="weui-cell weui-cell_active">
-                                        <div class="weui-cell__hd">
-                                            <img src="./images/driver/login/icon_mobile.png" alt="" style="height: 25px;">
-                                        </div>
-                                        <div class="weui-cell__bd">
-                                            <input class="weui-input" type="number" pattern="[0-9]*" placeholder="请输入您的手机号码">
-                                        </div>
-                                        <div class="weui-cell__ft">
-                                            <img src="./images/driver/login/icon_clear.png" alt="" style="width: 15px;">
-                                        </div>
-                                    </div>
-                                    <div class="weui-cell weui-cell_active" style="padding-left: 28px;">
-                                        <div class="weui-cell__hd">
-                                            <img src="./images/driver/login/icon_password.png" alt="" style="height: 25px;">
-                                        </div>
-                                        <div class="weui-cell__bd">
-                                            <input class="weui-input" type="password" id="js_input" placeholder="请输入您的登录密码">
-                                        </div>
-                                        <div class="weui-cell__ft">
-                                            <img src="./images/driver/login/icon_pass_hide.png" alt="" style="width: 15px;">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="weui-cells__tips"><a class="weui-link" href="javascript:">收不到验证码</a></div>
+                    <div class="col-md-6">
+                        <div class="ibox-content">
+                            <div class="form-group">
+                                <input type="text" name="tel" class="form-control" placeholder="请输入登录手机号" data-validates="{required: true, messages: {required: '登录手机号不允许为空'}}"/>
                             </div>
-                        </div>
-                        <div class="weui-form__tips-area">
-                            <label id="weuiAgree" for="weuiAgreeCheckbox" class="weui-agree">
-                                <input id="weuiAgreeCheckbox" type="checkbox" class="weui-agree__checkbox">
-                                <span class="weui-agree__text">阅读并同意<a href="javascript:">《相关条款》</a></span>
-                            </label>
-                        </div>
-                        <div class="weui-form__opr-area">
-                            <a class="weui-btn weui-btn_primary weui-btn_disabled" href="javascript:" id="showTooltips">确定</a>
+                            <div class="form-group">
+                                <input type="password" name="pwd" class="form-control" placeholder="请输入用户密码" required="required" data-validates="{required: true, messages: {required: '用户密码不允许为空'}}"/>
+                            </div>
+                            <button type="submit" class="btn btn-primary block full-width m-b">登录</button>
+                            <a href="javascript:;"><small>忘记密码？</small></a>
+                            <p class="m-t">
+                                <small>Inspinia we app framework base on Bootstrap 3 &copy; 2014</small>
+                            </p>
                         </div>
                     </div>
                 </div>
-                <div class="page__ft j_bottom">
-                    <div class="weui-footer">
-                        <p class="weui-footer__links">
-                            <img src="./images/driver/login/icon_beian.png" alt="">
-                            <a href="javascript:" class="weui-footer__link">沪ICP备17040677号</a>
-                        </p>
-                        <p class="weui-footer__text">上海市吴中东路555号天源大厦7楼 021-33385558</p>
-                        <p class="weui-footer__links">
-                            <img src="./images/driver/login/icon_beian.png" alt="">
-                            <a href="javascript:" class="weui-footer__link">沪公网安备 31010402003593号</a>
-                        </p>
-                    </div>
+            </form>
+            <hr/>
+            <div class="row">
+                <div class="col-md-6">Copyright Example Company</div>
+                <div class="col-md-6 text-right">
+                    <small>© 2014-2015</small>
                 </div>
             </div>
         </div>
